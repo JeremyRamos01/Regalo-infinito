@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "description": "Entrando en Lyoko - Pastel Gummy UI con Anime.js",
   "scripts": {
-    "dev": "node server.js"
+    "dev": "node dev-server.js"
   }
 }
