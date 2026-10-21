@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sector Hielo ♡ Mapa de Nuestros Recuerdos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../src/css/style.css">
+  <link rel="stylesheet" href="../src/css/components.css">
+  <link rel="stylesheet" href="../src/css/hielo.css">
+</head>
+<body>
+  <!-- Fondo Rosa Pastel con Textura Romántica -->
+  <div class="ambient-bg"></div>
+
+  <!-- Botón Corazoncito Blanco con Fondo Rojo: Volver al Código Inicial -->
+  <a href="../index.html" class="red-heart-btn" title="Volver al panel del código inicial ♡" aria-label="Código inicial">
+    <svg viewBox="0 0 24 24" class="white-heart-svg" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+    </svg>
+  </a>
+
+  <main class="stage-screen">
+    <div class="ice-container">
+      
+      <!-- Cabecera del Sector Hielo -->
+      <header class="ice-header">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 0.8rem; margin-bottom: 0.35rem;">
+          <img src="../assets/bubu-dudu/bubu-dudu-kisses.gif" alt="Bubu y Dudu besitos" class="bubu-sticker" style="width: 56px; height: 56px; border-radius: 14px;" />
+          <span class="ice-badge">❄️ Sector Hielo ♡</span>
+          <img src="../assets/bubu-dudu/bubu-dudu-love-hug.gif" alt="Bubu y Dudu abrazo" class="bubu-sticker" style="width: 56px; height: 56px; border-radius: 14px;" />
+        </div>
+        <h1 class="sector-phrase" style="font-size: clamp(1.25rem, 3.8vw, 1.8rem); margin-bottom: 0.2rem;">Trazando cada paso de nuestro camino juntos</h1>
+        <h2 class="ice-title" style="font-size: clamp(1.1rem, 3vw, 1.4rem); color: #0b4f8a;">Mapa de Nuestros Recuerdos</h2>
+        <p class="ice-subtitle">
+          Cada paso, cada confesión y cada instante que congeló el tiempo en nuestros corazones ♡
+        </p>
+        
+        <!-- Barra superior de avance en scroll -->
+        <div class="timeline-progress-wrap" title="Progreso de lectura del mapa">
+          <div class="timeline-progress-bar" id="timeline-progress-fill"></div>
+        </div>
+      </header>
+
+      <!-- Pista interactiva de ayuda -->
+      <p style="text-align: center; font-size: 0.8rem; font-weight: 800; color: #0b4f8a; margin: 0;">
+        ❄️ Desliza hacia abajo para descongelar cada momento juntos 👇
+      </p>
+
+      <!-- Línea de Tiempo Vertical con Scroll Reveal -->
+      <section class="timeline-track-container" id="timeline-track">
+        <!-- Generado dinámicamente con JavaScript -->
+      </section>
+
+      <!-- Pista Secreta: Color Blanco para Sector Roca -->
+      <section class="timeline-white-clue">
+        <div style="display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem;">
+          <span class="white-dot-indicator"></span>
+          <h3>Color Blanco</h3>
+        </div>
+        <p>
+          El color blanco para usarlo en el código de roca.
+        </p>
+        <small>
+          (esto se usará más adelante)
+        </small>
+      </section>
+
+      <!-- Footer con botón de vuelta -->
+      <footer class="ice-footer">
+        <a href="../index.html#biomas" class="unlock-btn" style="max-width: 280px; margin: 0 auto; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+          ⬅ Volver a los Biomas
+        </a>
+      </footer>
+
+    </div>
+  </main>
+
+  <!-- COMPANION FLOTANTE INTERACTIVO DE BUBU Y DUDU -->
+  <aside class="bubu-floating-companion" id="bubu-companion">
+    <div class="bubu-floating-speech is-hidden" id="bubu-speech">
+      ¡Revivir nuestros pasos me enamora más! 🥰
+    </div>
+    <button type="button" class="bubu-floating-btn" id="bubu-floating-btn" title="¡Tócame para un mensaje de amor! ♡" aria-label="Bubu y Dudu">
+      <img src="../assets/bubu-dudu/bubu-dudu-love-hug.gif" alt="Bubu y Dudu cariñosos" class="bubu-floating-img" />
+      <span class="bubu-floating-heart">💖</span>
+    </button>
+  </aside>
+
+  <script type="module" src="../src/js/hielo.js"></script>
+</body>
+</html>

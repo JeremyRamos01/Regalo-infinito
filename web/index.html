@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Entrando en Lyoko — Romantic Pastel UI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="./src/css/style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+</head>
+
+<body>
+  <div class="ambient-bg"></div>
+
+  <!-- Botón Corazoncito Blanco con Fondo Rojo: Lleva al Panel del Código de Acceso -->
+  <button type="button" id="btn-lock-gate" class="red-heart-btn" title="Volver al panel del código de acceso ♡" aria-label="Panel del código">
+    <svg viewBox="0 0 24 24" class="white-heart-svg" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+    </svg>
+  </button>
+
+  <section class="stage-screen" id="loader-screen">
+    <div class="loader-card">
+      <div class="bubu-loader-badge">
+        <img src="./assets/bubu-dudu/bubu-dudu-love-hug.gif" alt="Bubu y Dudu cariñosos" class="loader-bubu-img" />
+        <span class="bubu-bubble-mini">¡Cargando nuestro amor! 🐻💖🐼</span>
+      </div>
+      <div class="lyoko-crest">◈</div>
+      <div class="loader-badge">
+        <span class="loader-badge-dot"></span>
+        <span>Conectando... ♡</span>
+      </div>
+      <h1 class="loader-title" id="loader-title">Entrando en Lyoko</h1>
+      <div class="progress-container">
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill">
+            <span class="progress-heart" id="progress-heart">💖</span>
+          </div>
+        </div>
+        <div class="progress-meta">
+          <span id="progress-status">Conectando...</span>
+          <span class="percent-pill" id="progress-percent">0%</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stage-screen is-hidden" id="gate-screen">
+    <div class="gummy-box" id="gummy-box">
+      <div class="box-header-row">
+        <span class="gummy-badge">Terminal de Seguridad</span>
+        <button type="button" class="hint-lightbulb-btn" data-hint="gate1" title="Ver pista 💡">💡</button>
+      </div>
+      <h2 class="gummy-title">Código de Acceso</h2>
+      <p class="gummy-hint-prompt">Introduce la clave de 4 dígitos</p>
+
+      <div class="bubu-gate-helper">
+        <img src="./assets/bubu-dudu/bubu-dudu-waiting.gif" alt="Bubu y Dudu esperando"
+          class="bubu-sticker gate-bubu-img" />
+        <div class="bubu-speech-bubble">
+          <span>¿Te acuerdas de nuestro día especial, amor? 🐻💭</span>
+        </div>
+      </div>
+
+      <div class="code-slots">
+        <div class="code-slot"></div>
+        <div class="code-slot"></div>
+        <div class="code-slot"></div>
+        <div class="code-slot"></div>
+      </div>
+
+      <div class="gummy-keypad">
+        <button type="button" class="key-btn" data-key="1">1</button>
+        <button type="button" class="key-btn" data-key="2">2</button>
+        <button type="button" class="key-btn" data-key="3">3</button>
+        <button type="button" class="key-btn" data-key="4">4</button>
+        <button type="button" class="key-btn" data-key="5">5</button>
+        <button type="button" class="key-btn" data-key="6">6</button>
+        <button type="button" class="key-btn" data-key="7">7</button>
+        <button type="button" class="key-btn" data-key="8">8</button>
+        <button type="button" class="key-btn" data-key="9">9</button>
+        <button type="button" class="key-btn key-action" data-key="clear">Borrar</button>
+        <button type="button" class="key-btn" data-key="0">0</button>
+        <button type="button" class="key-btn key-action" data-key="back">⌫</button>
+      </div>
+
+      <button type="button" class="unlock-btn" id="unlock-btn">
+        Desbloquear Sector Lyoko ➔
+      </button>
+      <div class="feedback-msg" id="gate-feedback"></div>
+    </div>
+  </section>
+
+  <!-- 3. PÁGINA PRINCIPAL: 4 BIOMAS EN EL MEDIO -->
+  <main class="main-app is-hidden" id="main-app">
+    <div class="center-stage">
+      <div class="center-header">
+        <div class="bubu-welcome-banner">
+          <img src="./assets/bubu-dudu/bubu-dudu-happy-dance.gif" alt="Bubu y Dudu bailando"
+            class="bubu-sticker welcome-bubu-img" />
+          <div class="center-header-text" style="text-align: center;">
+            <span class="gummy-badge">Bienvenida Princesa Raquel ♡</span>
+            <h1 class="center-title">Elige según tu destino mi amor</h1>
+          </div>
+          <img src="./assets/bubu-dudu/bubu-dudu-smiling.gif" alt="Bubu y Dudu sonriendo"
+            class="bubu-sticker welcome-bubu-img-right" />
+        </div>
+      </div>
+
+      <div class="quad-grid">
+        <!-- 1. Sector Bosque (Icono Verde) -->
+        <article class="quad-card card-forest" data-sector="forest" tabindex="0">
+          <div class="bubu-card-mascot" title="Bubu y Dudu corriendo por el bosque">
+            <img src="./assets/bubu-dudu/bubu-dudu-running.gif" alt="Bubu y Dudu corriendo" />
+          </div>
+          <div class="card-fill-loader"></div>
+          <div class="quad-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path
+                d="M19.5 12.5a2.5 2.5 0 0 1 0-5V4a1 1 0 0 0-1-1h-3.5a2.5 2.5 0 0 1-5 0H6.5a1 1 0 0 0-1 1v3.5a2.5 2.5 0 0 1 0 5V17a1 1 0 0 0 1 1h3.5a2.5 2.5 0 0 1 5 0H20a1 1 0 0 0 1-1v-4.5z" />
+            </svg>
+          </div>
+          <h2 class="quad-title">Sector Bosque</h2>
+        </article>
+
+        <!-- 2. Sector Hielo -->
+        <article class="quad-card card-ice" data-sector="ice" tabindex="0">
+          <div class="bubu-card-mascot" title="Bubu y Dudu besitos de esquimal">
+            <img src="./assets/bubu-dudu/bubu-dudu-kisses.gif" alt="Bubu y Dudu besitos" />
+          </div>
+          <div class="card-fill-loader"></div>
+          <div class="quad-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round">
+              <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+              <line x1="8" y1="2" x2="8" y2="18"></line>
+              <line x1="16" y1="6" x2="16" y2="22"></line>
+            </svg>
+          </div>
+          <h2 class="quad-title">Sector Hielo</h2>
+        </article>
+
+        <!-- 3. Sector Desierto -->
+        <article class="quad-card card-desert" data-sector="desert" tabindex="0">
+          <div class="bubu-card-mascot" title="Bubu y Dudu abrazo cálido">
+            <img src="./assets/bubu-dudu/bubu-dudu-tight-hug.gif" alt="Bubu y Dudu abrazo" />
+          </div>
+          <div class="card-fill-loader"></div>
+          <div class="quad-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round">
+              <line x1="6" y1="12" x2="10" y2="12"></line>
+              <line x1="8" y1="10" x2="8" y2="14"></line>
+              <circle cx="15.5" cy="13" r="1"></circle>
+              <circle cx="18" cy="10.5" r="1"></circle>
+              <rect x="2" y="6" width="20" height="12" rx="6"></rect>
+            </svg>
+          </div>
+          <h2 class="quad-title">Sector Desierto</h2>
+        </article>
+
+        <!-- 4. Sector Roca (Alineado y desbloqueado) -->
+        <article class="quad-card card-rock" data-sector="rock" tabindex="0">
+          <div class="bubu-card-mascot" title="Bubu y Dudu sonriendo juntos">
+            <img src="./assets/bubu-dudu/bubu-dudu-smiling.gif" alt="Bubu y Dudu sonrisa" />
+          </div>
+          <div class="card-fill-loader"></div>
+          <div class="quad-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="m8 3 4 8 5-5 5 15H2L8 3z"></path>
+            </svg>
+          </div>
+          <h2 class="quad-title">Sector Roca</h2>
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <!-- POPUP DE PISTA (MODAL BOMBILLA 💡) -->
+  <div class="hint-modal-overlay is-hidden" id="hint-modal">
+    <div class="hint-modal-card">
+      <div class="hint-lightbulb-large">💡</div>
+      <span class="gummy-badge" id="hint-modal-badge">Pista Especial ♡</span>
+
+      <!-- Bubu y Dudu Pensando en la Pista -->
+      <div class="bubu-hint-companion">
+        <img src="./assets/bubu-dudu/bubu-dudu-waiting.gif" alt="Bubu y Dudu pensando"
+          class="bubu-sticker hint-bubu-img" />
+      </div>
+
+      <p class="hint-modal-text" id="hint-modal-text">
+        El cógido es el dia en que tu sonrisa hizo que la piedra mas brilalnte quedara en segundo plano
+      </p>
+      <button type="button" class="unlock-btn" id="close-hint-modal-btn">
+        ¡Entendido, mi amor! ♡
+      </button>
+    </div>
+  </div>
+
+  <!-- COMPANION FLOTANTE INTERACTIVO DE BUBU Y DUDU -->
+  <aside class="bubu-floating-companion" id="bubu-companion">
+    <div class="bubu-floating-speech is-hidden" id="bubu-speech">
+      ¡Te amo con locura Raquelita! 🥰
+    </div>
+    <button type="button" class="bubu-floating-btn" id="bubu-floating-btn" title="¡Tócame para un mensaje de amor! ♡"
+      aria-label="Bubu y Dudu">
+      <img src="./assets/bubu-dudu/bubu-dudu-love-hug.gif" alt="Bubu y Dudu cariñosos" class="bubu-floating-img" />
+      <span class="bubu-floating-heart">💖</span>
+    </button>
+  </aside>
+
+  <script type="module" src="./src/js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sector Bosque ♡ Lyoko Romántico</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/bosque.css">
+</head>
+
+<body>
+  <!-- Fondo Rosa Pastel con Textura Romántica -->
+  <div class="ambient-bg"></div>
+
+  <!-- Botón Corazoncito Blanco con Fondo Rojo: Volver al Código Inicial -->
+  <a href="../../index.html" class="red-heart-btn" title="Volver al panel del código inicial ♡" aria-label="Código inicial">
+    <svg viewBox="0 0 24 24" class="white-heart-svg" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+    </svg>
+  </a>
+
+  <main class="stage-screen">
+    <div class="sector-content-card" style="border-top: 8px solid var(--biome-forest-accent); max-width: 680px;">
+      <div style="display: flex; justify-content: center; margin-bottom: 0.5rem;">
+        <img src="../assets/bubu-dudu/bubu-dudu-running.gif" alt="Bubu y Dudu corriendo" class="bubu-sticker"
+          style="width: 72px; height: 72px; border-radius: 16px;" />
+      </div>
+      <span class="gummy-badge" style="background: var(--biome-forest-bg); border-color: var(--nb-black);">Sector Bosque
+        ♡</span>
+      <h1 class="sector-phrase">Vamos a armar uno de los recuerdos tan hermosos que hemos tenido mi amor</h1>
+
+      <div id="puzzle-app-container"></div>
+
+      <a href="../index.html#biomas" class="unlock-btn"
+        style="max-width: 280px; margin: 1rem auto 0; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+        ⬅ Volver a los Biomas
+      </a>
+    </div>
+  </main>
+
+  <aside class="bubu-floating-companion" id="bubu-companion">
+    <div class="bubu-floating-speech is-hidden" id="bubu-speech">
+      ¡Armar recuerdos contigo es lo más lindo! 🥰
+    </div>
+    <button type="button" class="bubu-floating-btn" id="bubu-floating-btn" title="¡Tócame para un mensaje de amor! ♡"
+      aria-label="Bubu y Dudu">
+      <img src="../assets/bubu-dudu/bubu-dudu-love-hug.gif" alt="Bubu y Dudu cariñosos" class="bubu-floating-img" />
+      <span class="bubu-floating-heart">💖</span>
+    </button>
+  </aside>
+
+  <script type="module" src="../src/js/bosque.js"></script>
+</body>
+
+</html>

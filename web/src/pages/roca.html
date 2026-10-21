@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sector Roca ♡ Código de Colores</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../src/css/style.css">
+  <link rel="stylesheet" href="../src/css/components.css">
+</head>
+<body>
+  <!-- Fondo Rosa Pastel con Textura Romántica -->
+  <div class="ambient-bg"></div>
+
+  <!-- SECTOR ROCA: CÓDIGO DE COLORES (AMARILLO, ROJO, BLANCO) -->
+  <main class="stage-screen">
+    <div class="gummy-box color-gate-box" id="color-box">
+      <div class="box-header-row">
+        <span class="gummy-badge">Sector Roca ♡</span>
+        <button type="button" class="hint-lightbulb-btn" id="roca-hint-btn" title="Ver pista de colores 💡">💡</button>
+      </div>
+      <h2 class="gummy-title">Código de Colores</h2>
+      <p class="gummy-hint-prompt">El código de colores es: las veces en que las rosas pudieron ver algo mas que ellas.</p>
+
+      <!-- Bubu & Dudu Helper en Código de Colores -->
+      <div class="bubu-gate-helper">
+        <img src="../assets/bubu-dudu/bubu-dudu-smiling.gif" alt="Bubu y Dudu sonriendo" class="bubu-sticker gate-bubu-img" />
+        <div class="bubu-speech-bubble">
+          <span>¿Qué colores iluminan nuestro amor, mi reina? 🐻🎨🐼</span>
+        </div>
+      </div>
+
+      <div class="color-code-slots">
+        <div class="color-slot" id="color-slot-0"></div>
+        <div class="color-slot" id="color-slot-1"></div>
+        <div class="color-slot" id="color-slot-2"></div>
+      </div>
+
+      <div class="color-keypad">
+        <button type="button" class="color-btn" data-color="rojo" style="--c: #ff4d6d;">
+          <span class="color-dot" style="background: #ff4d6d;"></span>
+          <span>Rojo</span>
+        </button>
+        <button type="button" class="color-btn" data-color="amarillo" style="--c: #ffd12e;">
+          <span class="color-dot" style="background: #ffd12e;"></span>
+          <span>Amarillo</span>
+        </button>
+        <button type="button" class="color-btn" data-color="azul" style="--c: #4d96ff;">
+          <span class="color-dot" style="background: #4d96ff;"></span>
+          <span>Azul</span>
+        </button>
+        <button type="button" class="color-btn" data-color="verde" style="--c: #52b788;">
+          <span class="color-dot" style="background: #52b788;"></span>
+          <span>Verde</span>
+        </button>
+        <button type="button" class="color-btn" data-color="morado" style="--c: #a06cd5;">
+          <span class="color-dot" style="background: #a06cd5;"></span>
+          <span>Morado</span>
+        </button>
+        <button type="button" class="color-btn" data-color="rosa" style="--c: #ff85a1;">
+          <span class="color-dot" style="background: #ff85a1;"></span>
+          <span>Rosa</span>
+        </button>
+        <button type="button" class="color-btn" data-color="gris" style="--c: #8d99ae;">
+          <span class="color-dot" style="background: #8d99ae;"></span>
+          <span>Gris</span>
+        </button>
+        <button type="button" class="color-btn" data-color="naranja" style="--c: #ff9f1c;">
+          <span class="color-dot" style="background: #ff9f1c;"></span>
+          <span>Naranja</span>
+        </button>
+        <button type="button" class="color-btn" data-color="blanco" style="--c: #ffffff;">
+          <span class="color-dot" style="background: #ffffff; border: 1.5px solid #222;"></span>
+          <span>Blanco</span>
+        </button>
+      </div>
+
+      <div class="color-actions-row">
+        <button type="button" class="key-btn key-action color-action-btn" id="color-clear-btn">Borrar</button>
+        <button type="button" class="key-btn key-action color-action-btn" id="color-back-btn">⌫</button>
+      </div>
+
+      <button type="button" class="unlock-btn" id="unlock-rock-btn" style="margin-top: 0.4rem;">
+        Desbloquear Carta de Amor ➔
+      </button>
+      <div class="feedback-msg" id="rock-gate-feedback"></div>
+
+      <a href="../index.html#biomas" class="key-btn key-action" style="padding: 0.45rem 1.1rem; font-size: 0.85rem; margin-top: 0.35rem; width: fit-content; margin-left: auto; margin-right: auto; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+        ⬅ Volver a los Biomas
+      </a>
+    </div>
+  </main>
+
+  <!-- POPUP DE PISTA (MODAL BOMBILLA 💡) -->
+  <div class="hint-modal-overlay is-hidden" id="hint-modal">
+    <div class="hint-modal-card">
+      <div class="hint-lightbulb-large">💡</div>
+      <span class="gummy-badge">Pista de Colores ♡</span>
+      
+      <!-- Bubu & Dudu Pensando en la Pista -->
+      <div class="bubu-hint-companion">
+        <img src="../assets/bubu-dudu/bubu-dudu-waiting.gif" alt="Bubu y Dudu pensando" class="bubu-sticker hint-bubu-img" />
+      </div>
+
+      <p class="hint-modal-text">
+        El código de colores es: las veces en que las rosas pudieron ver algo mas que ellas.
+      </p>
+      <button type="button" class="unlock-btn" id="close-hint-modal-btn">
+        ¡Entendido, mi amor! ♡
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const SECRET = ['amarillo', 'rojo', 'blanco'];
+    const PALETTE = {
+      rojo: '#ff4d6d',
+      amarillo: '#ffd12e',
+      azul: '#4d96ff',
+      verde: '#52b788',
+      morado: '#a06cd5',
+      rosa: '#ff85a1',
+      gris: '#8d99ae',
+      naranja: '#ff9f1c',
+      blanco: '#ffffff'
+    };
+
+    let selected = [];
+    const slots = [
+      document.getElementById('color-slot-0'),
+      document.getElementById('color-slot-1'),
+      document.getElementById('color-slot-2')
+    ];
+    const feedback = document.getElementById('rock-gate-feedback');
+    const colorBox = document.getElementById('color-box');
+    const hintModal = document.getElementById('hint-modal');
+
+    function updateSlots() {
+      slots.forEach((s, i) => {
+        const col = selected[i];
+        if (col && PALETTE[col]) {
+          s.style.backgroundColor = PALETTE[col];
+          s.style.transform = 'scale(1.05)';
+        } else {
+          s.style.backgroundColor = 'var(--nb-white)';
+          s.style.transform = 'scale(1)';
+        }
+      });
+    }
+
+    document.querySelectorAll('.color-btn[data-color]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (selected.length < 3) {
+          selected.push(btn.dataset.color);
+          updateSlots();
+          if (feedback) feedback.textContent = '';
+        }
+      });
+    });
+
+    document.getElementById('color-clear-btn')?.addEventListener('click', () => {
+      selected = [];
+      updateSlots();
+      if (feedback) feedback.textContent = '';
+    });
+
+    document.getElementById('color-back-btn')?.addEventListener('click', () => {
+      selected.pop();
+      updateSlots();
+    });
+
+    document.getElementById('unlock-rock-btn')?.addEventListener('click', () => {
+      if (selected.length < 3) {
+        if (feedback) {
+          feedback.style.color = 'var(--nb-brown-dark)';
+          feedback.textContent = 'Elige 3 colores para la combinación';
+        }
+        triggerError();
+        return;
+      }
+
+      const isMatch = selected.length === SECRET.length &&
+        selected.every((c, i) => c.toLowerCase() === SECRET[i].toLowerCase());
+
+      if (isMatch) {
+        if (feedback) {
+          feedback.style.color = '#00875a';
+          feedback.textContent = '¡Combinación correcta! Abriendo tu carta de amor... ♡';
+        }
+        setTimeout(() => {
+          window.location.href = './carta.html';
+        }, 500);
+      } else {
+        if (feedback) {
+          feedback.style.color = '#de350b';
+          feedback.textContent = 'Combinación incorrecta. Vuelve a intentarlo mi amor';
+        }
+        triggerError();
+        setTimeout(() => {
+          selected = [];
+          updateSlots();
+        }, 400);
+      }
+    });
+
+    function triggerError() {
+      if (!colorBox) return;
+      colorBox.classList.remove('shake-error');
+      void colorBox.offsetWidth;
+      colorBox.classList.add('shake-error');
+    }
+
+    // Modal de Pista
+    document.getElementById('roca-hint-btn')?.addEventListener('click', () => {
+      hintModal?.classList.remove('is-hidden');
+    });
+
+    document.getElementById('close-hint-modal-btn')?.addEventListener('click', () => {
+      hintModal?.classList.add('is-hidden');
+    });
+
+    hintModal?.addEventListener('click', (e) => {
+      if (e.target === hintModal) hintModal.classList.add('is-hidden');
+    });
+
+    // Companion Flotante Bubu & Dudu
+    const bubuBtn = document.getElementById('bubu-floating-btn');
+    const bubuSpeech = document.getElementById('bubu-speech');
+    const LOVE_PHRASES = [
+      "¡Te amo con locura Raquelita! 🥰",
+      "¡Seremos viejitos juntos, señorita! 👴👵",
+      "¡Dudu y Bubu dicen que eres la más hermosa del universo! ✨",
+      "¡Abrazo gigante de oso para mi princesa! 🐻💖🐼",
+      "¡Dios bendice nuestro camino hoy y siempre! 🤍",
+      "¡Eres lo más bonito que me ha pasado en la vida! 🌹",
+      "¡Bubu no puede soltar a Dudu, justo como yo a ti! 🥹",
+      "¡Un besito en la frente de parte de Jeremy! 😘"
+    ];
+    let bubuTimeout = null;
+
+    bubuBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const p = LOVE_PHRASES[Math.floor(Math.random() * LOVE_PHRASES.length)];
+      if (bubuSpeech) {
+        bubuSpeech.textContent = p;
+        bubuSpeech.classList.remove('is-hidden');
+      }
+
+      // Micro heart
+      const heart = document.createElement('span');
+      heart.textContent = '💖';
+      heart.style.position = 'absolute';
+      heart.style.left = '50%';
+      heart.style.top = '0%';
+      heart.style.transform = 'translate(-50%, -50%)';
+      heart.style.pointerEvents = 'none';
+      heart.style.fontSize = '1.4rem';
+      heart.style.transition = 'all 0.85s cubic-bezier(0.2, 0.8, 0.2, 1)';
+      heart.style.opacity = '1';
+      heart.style.zIndex = '1000';
+      bubuBtn.appendChild(heart);
+      requestAnimationFrame(() => {
+        const randomX = (Math.random() - 0.5) * 50;
+        heart.style.transform = `translate(calc(-50% + ${randomX}px), -65px) scale(1.4)`;
+        heart.style.opacity = '0';
+      });
+      setTimeout(() => heart.remove(), 900);
+
+      clearTimeout(bubuTimeout);
+      bubuTimeout = setTimeout(() => {
+        bubuSpeech?.classList.add('is-hidden');
+      }, 4500);
+    });
+  </script>
+
+  <script type="module">
+    import { initMiniMusicPlayer } from '../src/js/components/miniMusicPlayer.js';
+    initMiniMusicPlayer({ biome: 'roca', title: 'Sector Roca ♡' });
+  </script>
+
+  <!-- COMPANION FLOTANTE INTERACTIVO DE BUBU Y DUDU -->
+  <aside class="bubu-floating-companion" id="bubu-companion">
+    <div class="bubu-floating-speech is-hidden" id="bubu-speech">
+      ¡Te amo con locura Raquelita! 🥰
+    </div>
+    <button type="button" class="bubu-floating-btn" id="bubu-floating-btn" title="¡Tócame para un mensaje de amor! ♡" aria-label="Bubu y Dudu">
+      <img src="../assets/bubu-dudu/bubu-dudu-love-hug.gif" alt="Bubu y Dudu cariñosos" class="bubu-floating-img" />
+      <span class="bubu-floating-heart">💖</span>
+    </button>
+  </aside>
+</body>
+</html>

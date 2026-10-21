@@ -1,0 +1,333 @@
+@import './variables.css';
+@import './components.css';
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--nb-bg);
+  color: var(--nb-black);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Fondo Rosa Pastel con Textura Romántica */
+.ambient-bg {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+  background-color: var(--nb-bg);
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(230, 57, 86, 0.16) 1.5px, transparent 1.5px),
+    url("data:image/svg+xml,%3Csvg width='52' height='52' viewBox='0 0 52 52' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M26 31l-1.45-1.32C19.4 25 16 21.9 16 18.1 16 15 18.4 12.6 21.5 12.6c1.74 0 3.41.81 4.5 2.09C27.09 13.41 28.76 12.6 30.5 12.6 33.6 12.6 36 15 36 18.1c0 3.8-3.4 6.9-8.55 11.6L26 31z' fill='%23ff758f' fill-opacity='0.24' transform='scale(0.6) translate(18, 18)'/%3E%3C/svg%3E");
+  background-size: 26px 26px, 52px 52px;
+  background-position: 0 0, 13px 13px;
+  opacity: 1;
+}
+
+/* Pantallas fijas / modales */
+.stage-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* Permite hacer scroll arriba del todo sin que el header se quede oculto */
+  padding: clamp(0.6rem, 2.5vw, 1.5rem);
+  box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.is-hidden {
+  display: none !important;
+}
+
+/* ==========================================
+   PÁGINA PRINCIPAL: 4 BIOMAS DE LYOKO
+   ========================================== */
+.main-app {
+  position: relative;
+  z-index: 5;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 3.5vw, 2.5rem) clamp(0.8rem, 3vw, 1.6rem);
+}
+
+.center-stage {
+  width: 100%;
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: auto;
+}
+
+.center-header {
+  margin-bottom: clamp(1rem, 3vw, 1.8rem);
+}
+
+.center-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4.8vw, 2.7rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: var(--nb-black);
+  margin-top: 0.4rem;
+}
+
+.center-subtitle {
+  font-size: clamp(0.9rem, 2.4vw, 1.05rem);
+  color: var(--nb-brown-soft);
+  font-weight: 700;
+  margin-top: 0.2rem;
+}
+
+/* Grilla responsive de los 4 Biomas */
+.quad-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.85rem, 2.2vw, 1.5rem);
+  width: 100%;
+  margin-bottom: clamp(1.2rem, 3vw, 1.8rem);
+}
+
+.quad-card {
+  background: var(--nb-white);
+  border: 3.5px solid var(--nb-black);
+  box-shadow: var(--nb-shadow);
+  border-radius: var(--nb-radius);
+  padding: clamp(1.2rem, 3.5vw, 2rem) 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.12s ease;
+  user-select: none;
+}
+
+.quad-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--nb-shadow-lg);
+}
+
+.quad-card:active {
+  transform: translate(3px, 3px);
+  box-shadow: var(--nb-shadow-active);
+}
+
+.quad-icon {
+  width: clamp(54px, 11vw, 68px);
+  height: clamp(54px, 11vw, 68px);
+  border-radius: 14px;
+  border: 3px solid var(--nb-black);
+  display: grid;
+  place-items: center;
+  margin-bottom: 0.75rem;
+  box-shadow: 3px 3px 0px var(--nb-black);
+  color: var(--nb-black);
+}
+
+.quad-icon svg {
+  width: 58%;
+  height: 58%;
+}
+
+/* 1. Sector Bosque (Icono Verde) */
+.card-forest { background: var(--biome-forest-bg); }
+.card-forest .quad-icon { background: var(--biome-forest-accent); color: #ffffff; }
+.card-forest:hover { background: #daf3e3; }
+
+/* 2. Sector Hielo */
+.card-ice { background: var(--biome-ice-bg); }
+.card-ice .quad-icon { background: var(--biome-ice-accent); color: #ffffff; }
+.card-ice:hover { background: #e2f0fb; }
+
+/* 3. Sector Desierto */
+.card-desert { background: var(--biome-desert-bg); }
+.card-desert .quad-icon { background: var(--biome-desert-accent); color: #ffffff; }
+.card-desert:hover { background: #ffedd4; }
+
+/* 4. Sector Roca (Alineado y normal) */
+.card-rock { background: var(--biome-rock-bg); }
+.card-rock .quad-icon { background: var(--nb-brown-soft); color: #ffffff; }
+.card-rock:hover { background: #e2d7d0; }
+
+/* Relleno dinámico de color al pulsar el botón (Alineado perfectamente sin salirse) */
+.card-fill-loader {
+  position: absolute;
+  inset: 0;
+  width: 0%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: calc(var(--nb-radius) - 3.5px);
+  transition: width 0.75s cubic-bezier(0.25, 1, 0.5, 1);
+  opacity: 0.95;
+}
+
+.card-forest .card-fill-loader { background: var(--biome-forest-fill); }
+.card-ice .card-fill-loader { background: var(--biome-ice-fill); }
+.card-desert .card-fill-loader { background: var(--biome-desert-fill); }
+.card-rock .card-fill-loader { background: var(--biome-rock-fill); }
+
+.quad-card.is-filled .card-fill-loader {
+  width: 100%;
+}
+
+.quad-card .quad-icon,
+.quad-card .quad-title {
+  position: relative;
+  z-index: 2;
+}
+
+.quad-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 2.8vw, 1.5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--nb-black);
+  margin-bottom: 0;
+}
+
+.center-retest-btn {
+  padding: 0.75rem 1.6rem;
+  font-size: 0.95rem;
+  width: fit-content;
+}
+
+/* ==========================================
+   4. PÁGINA DEL SECTOR / DESTINO ROMÁNTICO
+   ========================================== */
+.sector-content-card {
+  width: min(660px, 94vw);
+  margin: 1rem auto;
+  padding: clamp(1.4rem, 4vw, 2.5rem) clamp(1rem, 3.5vw, 2rem);
+  border-radius: var(--nb-radius);
+  background: var(--nb-white);
+  border: 4px solid var(--nb-black);
+  box-shadow: var(--nb-shadow-lg);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  box-sizing: border-box;
+}
+
+.sector-phrase {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 4.2vw, 2.1rem);
+  font-weight: 900;
+  line-height: 1.25;
+  color: var(--nb-black);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+.puzzle-preview-box {
+  width: 100%;
+  padding: clamp(1.4rem, 4vw, 2.2rem);
+  background: var(--biome-forest-bg);
+  border: 3.5px solid var(--nb-black);
+  box-shadow: 4px 4px 0px var(--nb-black);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.puzzle-preview-icon {
+  font-size: clamp(2.4rem, 6vw, 3.4rem);
+}
+
+.puzzle-preview-sub {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--nb-brown-dark);
+}
+
+/* Responsividad estricta para pantallas pequeñas */
+@media (max-width: 520px) {
+  .quad-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.7rem;
+  }
+  .quad-card {
+    padding: 1rem 0.5rem;
+    border-radius: 14px;
+  }
+  .quad-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+  }
+  .quad-title {
+    font-size: 1rem;
+  }
+  .lock-pill-badge {
+    top: 6px;
+    right: 6px;
+    font-size: 0.62rem;
+    padding: 0.15rem 0.4rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .stage-screen {
+    padding: 4.4rem 0.65rem 10rem !important;
+    min-height: 100vh !important;
+    box-sizing: border-box !important;
+  }
+
+  .sector-content-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 1.1rem 0.75rem 2.2rem !important;
+    box-sizing: border-box !important;
+    border-width: 3px !important;
+    border-radius: 18px !important;
+  }
+
+  .sector-phrase {
+    font-size: clamp(0.95rem, 4vw, 1.2rem) !important;
+    line-height: 1.35 !important;
+    padding: 0 0.8rem !important;
+    margin: 0.2rem 0 0.5rem 0 !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .quad-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

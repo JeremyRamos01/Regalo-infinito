@@ -1,0 +1,9 @@
+{
+  "name": "lyoko-pastel-web",
+  "version": "1.0.0",
+  "description": "Entrando en Lyoko - Pastel Gummy UI con Anime.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  }
+}

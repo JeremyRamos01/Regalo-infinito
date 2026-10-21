@@ -1,0 +1,403 @@
+/* ============================================================
+   SECTOR HIELO: MAPA LINEAL DE RECUERDOS (TIMELINE VERTICAL)
+   Estética Romantic Pastel Neubrutalism + Scroll Reveal
+   ============================================================ */
+
+.ice-container {
+  width: min(840px, 94vw);
+  background: var(--nb-white);
+  border: 4px solid var(--nb-black);
+  box-shadow: var(--nb-shadow-lg);
+  border-radius: var(--nb-radius);
+  padding: clamp(1.4rem, 4vw, 2.6rem) clamp(1rem, 3.5vw, 2.2rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  position: relative;
+  border-top: 10px solid var(--biome-ice-accent);
+  box-sizing: border-box;
+  margin: 1rem auto;
+}
+
+/* Header del Sector Hielo */
+.ice-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.ice-badge {
+  display: inline-block;
+  padding: 0.25rem 0.9rem;
+  border-radius: var(--nb-radius-pill);
+  background: var(--biome-ice-bg);
+  border: 2px solid var(--nb-black);
+  box-shadow: 2px 2px 0px var(--nb-black);
+  color: #1d3557;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ice-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 4vw, 2.1rem);
+  font-weight: 900;
+  color: var(--nb-black);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.ice-subtitle {
+  font-size: clamp(0.85rem, 2.2vw, 0.98rem);
+  font-weight: 700;
+  color: var(--nb-brown-soft);
+  max-width: 540px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Barra de progreso de lectura en scroll */
+.timeline-progress-wrap {
+  width: 100%;
+  max-width: 440px;
+  height: 10px;
+  background: #e1f0fa;
+  border: 2px solid var(--nb-black);
+  box-shadow: 2px 2px 0px var(--nb-black);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 0.3rem auto;
+}
+
+.timeline-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #72b7e8, #4d96ff, #ff758f);
+  border-radius: 999px;
+  transition: width 0.15s ease-out;
+}
+
+/* Contenedor de la Línea de Tiempo */
+.timeline-track-container {
+  position: relative;
+  width: 100%;
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2.2rem;
+}
+
+/* La línea vertical central de hielo */
+.timeline-track-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 28px;
+  width: 5px;
+  background: repeating-linear-gradient(
+    to bottom,
+    #72b7e8,
+    #72b7e8 12px,
+    #bfe3f7 12px,
+    #bfe3f7 24px
+  );
+  border-radius: 4px;
+}
+
+@media (min-width: 680px) {
+  .timeline-track-container::before {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+/* Elemento individual de la línea de tiempo */
+.timeline-node {
+  position: relative;
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  opacity: 1; /* Siempre visible por defecto para que nunca se quede en blanco */
+  transform: translateY(0);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+
+/* Marcador / Nodo circular en la línea */
+.timeline-pin {
+  position: absolute;
+  left: 14px;
+  top: 12px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 3px solid var(--nb-black);
+  box-shadow: 2px 2px 0px var(--nb-black);
+  display: grid;
+  place-items: center;
+  font-size: 1.1rem;
+  z-index: 3;
+  transition: transform 0.25s ease, background 0.2s ease;
+}
+
+.timeline-node:hover .timeline-pin {
+  transform: scale(1.15) rotate(-6deg);
+  background: #e1f0fa;
+}
+
+/* Tarjeta de Contenido del Hito */
+.timeline-card {
+  margin-left: 60px;
+  width: calc(100% - 60px);
+  background: #ffffff;
+  border: 3px solid var(--nb-black);
+  box-shadow: 4px 4px 0px var(--nb-black);
+  border-radius: 16px;
+  padding: 1.1rem 1.3rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  position: relative;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.timeline-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 5px 5px 0px var(--nb-black);
+}
+
+/* Posicionamiento alternado en pantallas medianas y grandes */
+@media (min-width: 680px) {
+  .timeline-pin {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .timeline-node:hover .timeline-pin {
+    transform: translateX(-50%) scale(1.15) rotate(-6deg);
+  }
+
+  .timeline-node:nth-child(odd) .timeline-card {
+    margin-left: 0;
+    margin-right: auto;
+    width: calc(50% - 32px);
+    text-align: right;
+  }
+
+  .timeline-node:nth-child(even) .timeline-card {
+    margin-left: auto;
+    margin-right: 0;
+    width: calc(50% - 32px);
+    text-align: left;
+  }
+}
+
+/* Header de la tarjeta */
+.timeline-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+@media (min-width: 680px) {
+  .timeline-node:nth-child(odd) .timeline-card-header {
+    justify-content: flex-end;
+  }
+}
+
+.timeline-date-tag {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.74rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  background: #dff0fd;
+  border: 1.8px solid var(--nb-black);
+  box-shadow: 1.5px 1.5px 0px var(--nb-black);
+  color: #0b4f8a;
+  text-transform: uppercase;
+}
+
+.timeline-tag-accent {
+  background: #ffe3ec;
+  color: #c9184a;
+}
+
+.timeline-node-title {
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  font-weight: 900;
+  color: var(--nb-black);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.timeline-node-desc {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--nb-brown-dark);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.timeline-node-quote {
+  background: #fff8f9;
+  border-left: 3.5px solid #ff758f;
+  padding: 0.55rem 0.85rem;
+  border-radius: 0 10px 10px 0;
+  font-style: italic;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #723c4a;
+  margin-top: 0.2rem;
+}
+
+/* Contenido multimedia (Foto o Video) en la tarjeta */
+.timeline-media-container {
+  margin-top: 0.6rem;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2.5px solid var(--nb-black);
+  box-shadow: 2.5px 2.5px 0px var(--nb-black);
+  background: #000;
+  max-height: 320px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.timeline-media-container img,
+.timeline-media-container video {
+  width: 100%;
+  max-height: 320px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Botón de subida única solo para ti */
+.timeline-upload-area {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  align-items: flex-start;
+}
+
+@media (min-width: 680px) {
+  .timeline-node:nth-child(odd) .timeline-upload-area {
+    align-items: flex-end;
+  }
+}
+
+.timeline-upload-btn {
+  background: #fff8f0;
+  border: 2px dashed var(--nb-black);
+  box-shadow: 2px 2px 0px var(--nb-black);
+  border-radius: 10px;
+  padding: 0.35rem 0.75rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.75rem;
+  color: var(--nb-brown-dark);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: transform 0.1s ease, background 0.12s ease;
+}
+
+.timeline-upload-btn:hover {
+  background: #ffe3ca;
+  transform: translateY(-1px);
+}
+
+.timeline-upload-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px var(--nb-black);
+}
+
+.timeline-upload-progress {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #0b4f8a;
+}
+
+
+/* Pista Secreta: Color Blanco para Sector Roca */
+.timeline-white-clue {
+  background: #ffffff;
+  border: 3.5px solid var(--nb-black);
+  box-shadow: 4px 4px 0px var(--nb-black);
+  border-radius: 16px;
+  padding: 1.2rem 1.4rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0.5rem auto 1rem;
+  max-width: 520px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.white-dot-indicator {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 3px solid var(--nb-black);
+  box-shadow: 1.5px 1.5px 0px var(--nb-black);
+}
+
+.timeline-white-clue h3 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.1rem;
+  color: var(--nb-black);
+  text-transform: uppercase;
+  margin: 0;
+  letter-spacing: 0.03em;
+}
+
+.timeline-white-clue p {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.98rem;
+  color: var(--nb-black);
+  line-height: 1.35;
+}
+
+.timeline-white-clue small {
+  font-weight: 700;
+  color: var(--nb-brown-soft);
+  font-size: 0.82rem;
+}
+
+/* Footer con botón de vuelta */
+.ice-footer {
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 600px) {
+  .ice-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 1.2rem 0.65rem 6.5rem !important;
+    border-width: 3px !important;
+    border-radius: 18px !important;
+  }
+}
+

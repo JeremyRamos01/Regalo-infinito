@@ -1,0 +1,1084 @@
+/* ==========================================
+   NEUBRUTALISM ROMANTIC COMPONENTS
+   ========================================== */
+
+/* Cursor nativo sin lag */
+.cursor-dot,
+.cursor-blob {
+  display: none !important;
+}
+
+.shake-error {
+  animation: neubrutalShake 0.32s ease-in-out;
+}
+
+@keyframes neubrutalShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+/* ==========================================
+   1. PANTALLA DE CARGA (ROMÁNTICA PASTEL)
+   ========================================== */
+.loader-card {
+  width: min(500px, 92vw);
+  margin: auto 0;
+  padding: clamp(1.8rem, 5vw, 2.6rem) clamp(1.2rem, 4vw, 2.2rem);
+  border-radius: var(--nb-radius);
+  background: var(--nb-white);
+  border: 4px solid var(--nb-black);
+  box-shadow: var(--nb-shadow-lg);
+  text-align: center;
+  position: relative;
+}
+
+.lyoko-crest {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 1.2rem;
+  border-radius: var(--nb-radius-sm);
+  background: var(--nb-rose-light);
+  border: 3.5px solid var(--nb-black);
+  box-shadow: var(--nb-shadow-sm);
+  display: grid;
+  place-items: center;
+  color: var(--nb-rose-deep);
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 900;
+}
+
+.loader-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 1rem;
+  border-radius: var(--nb-radius-pill);
+  background: var(--nb-cream);
+  border: 2px solid var(--nb-black);
+  box-shadow: 2px 2px 0px var(--nb-black);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--nb-black);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.8rem;
+}
+
+.loader-badge-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--nb-rose-pastel);
+  border: 1.5px solid var(--nb-black);
+  animation: pulseDot 1s infinite alternate;
+}
+
+@keyframes pulseDot {
+  0% { transform: scale(0.85); background: var(--nb-rose-pastel); }
+  100% { transform: scale(1.2); background: var(--nb-rose-deep); }
+}
+
+.loader-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 4.8vw, 2.6rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  color: var(--nb-black);
+  margin-bottom: 1.6rem;
+  line-height: 1.05;
+}
+
+.loader-title .letter {
+  display: inline-block;
+}
+
+/* Barra de carga Neubrutalist Pastel */
+.progress-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.progress-track {
+  width: 100%;
+  height: clamp(38px, 6vw, 44px);
+  background: var(--nb-cream);
+  border-radius: 14px;
+  padding: 4px;
+  border: 3.5px solid var(--nb-black);
+  box-shadow: var(--nb-shadow-sm);
+  position: relative;
+}
+
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #ffccd5 0%, #ff85a1 50%, #ff4d6d 100%);
+  border: 2px solid var(--nb-black);
+  position: relative;
+  transition: width 0.08s linear;
+}
+
+.progress-heart {
+  position: absolute;
+  right: -14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.35rem;
+  line-height: 1;
+  filter: drop-shadow(2px 2px 0px var(--nb-black));
+  animation: heartPulse 0.5s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 5;
+  transition: opacity 0.15s ease;
+  opacity: 0;
+}
+
+@keyframes heartPulse {
+  0% { transform: translateY(-50%) scale(0.96); }
+  100% { transform: translateY(-50%) scale(1.24); }
+}
+
+.progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+#progress-status {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+  color: var(--nb-brown-dark);
+}
+
+.percent-pill {
+  font-family: var(--font-mono);
+  font-size: clamp(0.92rem, 2.6vw, 1.05rem);
+  font-weight: 900;
+  padding: 0.25rem 0.85rem;
+  border-radius: var(--nb-radius-pill);
+  background: var(--nb-rose-light);
+  border: 2px solid var(--nb-black);
+  box-shadow: 2px 2px 0px var(--nb-black);
+  color: var(--nb-black);
+}
+
+/* ==========================================
+   2. CUADRADO DE CÓDIGO (SIN SCROLL / COMPACTO)
+   ========================================== */
+.gummy-box {
+  width: min(420px, 94vw);
+  margin: auto 0;
+  padding: clamp(1.2rem, 3vh, 1.8rem) clamp(1rem, 3.5vw, 1.8rem);
+  border-radius: var(--nb-radius);
+  background: var(--nb-white);
+  border: 4px solid var(--nb-black);
+  box-shadow: var(--nb-shadow-lg);
+  text-align: center;
+  position: relative;
+  overflow: hidden; /* Cero scroll */
+  box-sizing: border-box;
+}
+
+.gummy-gloss {
+  display: none;
+}
+
+.gummy-badge {
+  display: inline-block;
+  padding: 0.25rem 0.9rem;
+  border-radius: var(--nb-radius-pill);
+  background: var(--nb-rose-light);
+  border: 2px solid var(--nb-black);
+  box-shadow: 2px 2px 0px var(--nb-black);
+  color: var(--nb-black);
+  font-family: var(--font-mono);
+  font-weight: 900;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+}
+
+.gummy-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3.8vw, 1.75rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: var(--nb-black);
+  margin-bottom: 0.25rem;
+}
+
+.gummy-hint {
+  font-size: clamp(0.78rem, 2vw, 0.88rem);
+  color: var(--nb-brown-dark);
+  font-weight: 700;
+  line-height: 1.35;
+  margin-bottom: 0.75rem;
+  background: var(--nb-cream);
+  padding: 0.45rem 0.75rem;
+  border-radius: var(--nb-radius-sm);
+  border: 2px solid var(--nb-black);
+  box-shadow: 2px 2px 0px var(--nb-black);
+}
+
+.code-slots {
+  display: flex;
+  justify-content: center;
+  gap: clamp(0.4rem, 1.8vw, 0.7rem);
+  margin-bottom: 0.75rem;
+}
+
+.code-slot {
+  width: clamp(48px, 13vw, 58px);
+  height: clamp(52px, 8vh, 64px);
+  border-radius: 12px;
+  border: 3px solid var(--nb-black);
+  background: var(--nb-white);
+  font-family: var(--font-mono);
+  font-size: clamp(1.4rem, 4vw, 1.8rem);
+  font-weight: 900;
+  color: var(--nb-black);
+  display: grid;
+  place-items: center;
+  box-shadow: 3px 3px 0px var(--nb-black);
+  transition: transform 0.08s ease, background 0.12s ease;
+}
+
+.code-slot.filled {
+  background: var(--nb-rose-light);
+  border-color: var(--nb-rose-deep);
+  color: var(--nb-rose-deep);
+}
+
+.gummy-keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.35rem, 1vh, 0.55rem);
+  margin-bottom: 0.75rem;
+}
+
+.key-btn {
+  padding: clamp(0.5rem, 1.4vh, 0.7rem) 0;
+  border-radius: 10px;
+  border: 2.5px solid var(--nb-black);
+  background: var(--nb-white);
+  color: var(--nb-black);
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2.5vh, 1.25rem);
+  font-weight: 900;
+  box-shadow: 2.5px 2.5px 0px var(--nb-black);
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.key-btn:hover {
+  background: var(--nb-cream);
+}
+
+.key-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: var(--nb-shadow-active);
+}
+
+.key-btn.key-action {
+  background: var(--nb-cream);
+  font-size: 0.95rem;
+}
+
+.unlock-btn {
+  width: 100%;
+  padding: clamp(0.65rem, 1.6vh, 0.85rem) 1.2rem;
+  border-radius: 12px;
+  border: 3px solid var(--nb-black);
+  background: var(--nb-rose-pastel);
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 2.2vw, 1.08rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  box-shadow: var(--nb-shadow-sm);
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.unlock-btn:hover {
+  background: var(--nb-rose-deep);
+}
+
+.unlock-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: var(--nb-shadow-active);
+}
+
+.feedback-msg {
+  min-height: 1.2rem;
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--nb-black);
+}
+
+/* ==========================================
+   BOTÓN BOMBILLA Y CABECERA DE CAJA
+   ========================================== */
+.box-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 0.35rem;
+}
+
+.hint-lightbulb-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 2.5px solid var(--nb-black);
+  background: var(--nb-gold-pastel);
+  box-shadow: 2px 2px 0px var(--nb-black);
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.hint-lightbulb-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3.5px 3.5px 0px var(--nb-black);
+}
+
+.hint-lightbulb-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: var(--nb-shadow-active);
+}
+
+/* ==========================================
+   POPUP DE PISTA (MODAL NEUBRUTALIST)
+   ========================================== */
+.hint-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(44, 26, 22, 0.4);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.2rem;
+}
+
+.hint-modal-card {
+  width: min(440px, 92vw);
+  padding: clamp(1.6rem, 4vw, 2.4rem);
+  background: var(--nb-white);
+  border: 4px solid var(--nb-black);
+  box-shadow: var(--nb-shadow-lg);
+  border-radius: var(--nb-radius);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hint-lightbulb-large {
+  font-size: 2.8rem;
+  width: 68px;
+  height: 68px;
+  border-radius: 16px;
+  border: 3px solid var(--nb-black);
+  background: var(--nb-gold-pastel);
+  box-shadow: 3px 3px 0px var(--nb-black);
+  display: grid;
+  place-items: center;
+}
+
+.hint-modal-text {
+  font-size: clamp(0.98rem, 2.6vw, 1.15rem);
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--nb-brown-dark);
+  background: var(--nb-cream);
+  border: 2.5px solid var(--nb-black);
+  box-shadow: 3px 3px 0px var(--nb-black);
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+}
+
+/* ==========================================
+   CÓDIGO DE COLORES (SECTOR ROCA)
+   ========================================== */
+.gummy-hint-prompt {
+  font-size: clamp(0.78rem, 2vw, 0.88rem);
+  color: var(--nb-brown-soft);
+  font-weight: 700;
+  margin-bottom: 0.65rem;
+}
+
+.color-code-slots {
+  display: flex;
+  justify-content: center;
+  gap: clamp(0.6rem, 2.5vw, 1rem);
+  margin-bottom: 0.75rem;
+}
+
+.color-slot {
+  width: clamp(52px, 14vw, 64px);
+  height: clamp(52px, 14vw, 64px);
+  border-radius: 14px;
+  border: 3px solid var(--nb-black);
+  background: var(--nb-white);
+  box-shadow: 3px 3px 0px var(--nb-black);
+  transition: transform 0.08s ease, background-color 0.15s ease;
+}
+
+.color-keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.35rem, 1vh, 0.5rem);
+  margin-bottom: 0.55rem;
+}
+
+.color-btn {
+  padding: clamp(0.45rem, 1.1vh, 0.65rem) 0.3rem;
+  border-radius: 10px;
+  border: 2.5px solid var(--nb-black);
+  background: var(--nb-white);
+  box-shadow: 2.5px 2.5px 0px var(--nb-black);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: var(--nb-black);
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.color-btn:hover {
+  background: var(--nb-cream);
+  transform: translate(-1px, -1px);
+  box-shadow: 3.5px 3.5px 0px var(--nb-black);
+}
+
+.color-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: var(--nb-shadow-active);
+}
+
+.color-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid var(--nb-black);
+  flex-shrink: 0;
+}
+
+.color-actions-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-bottom: 0.4rem;
+}
+
+.color-action-btn {
+  flex: 1;
+  padding: 0.5rem 0;
+  font-size: 0.92rem;
+}
+
+/* ==========================================
+   APARTADO DE LA CARTA DE AMOR
+   ========================================== */
+.letter-card {
+  width: min(620px, 94vw);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: clamp(1.8rem, 4.5vw, 2.6rem) clamp(1.2rem, 4vw, 2.2rem);
+  background: var(--nb-white);
+  border: 4px solid var(--nb-black);
+  box-shadow: var(--nb-shadow-lg);
+  border-radius: var(--nb-radius);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.letter-stamp {
+  font-size: 2.4rem;
+  width: 58px;
+  height: 58px;
+  border-radius: 12px;
+  border: 2.5px solid var(--nb-black);
+  background: var(--nb-rose-light);
+  box-shadow: 3px 3px 0px var(--nb-black);
+  display: grid;
+  place-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.letter-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 4.5vw, 2.4rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--nb-black);
+  margin-bottom: 1rem;
+}
+
+.letter-body {
+  width: 100%;
+  background: var(--nb-cream);
+  border: 2.5px solid var(--nb-black);
+  box-shadow: 3px 3px 0px var(--nb-black);
+  border-radius: 14px;
+  padding: clamp(1.2rem, 3.5vw, 1.8rem);
+  text-align: left;
+  margin-bottom: 1.4rem;
+}
+
+.letter-greeting {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--nb-rose-deep);
+  margin-bottom: 0.8rem;
+}
+
+.letter-paragraph {
+  font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+  line-height: 1.65;
+  color: var(--nb-brown-dark);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.letter-signature {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--nb-brown-dark);
+  text-align: right;
+  margin-top: 1.2rem;
+}
+
+/* ============================================================
+   BUBU & DUDU CUTE STICKERS & COMPANIONS
+   ============================================================ */
+
+.bubu-sticker {
+  border: 2.5px solid var(--nb-black);
+  box-shadow: 3px 3px 0px var(--nb-black);
+  border-radius: 14px;
+  background: #ffffff;
+  object-fit: cover;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  user-select: none;
+}
+
+.bubu-sticker:hover {
+  transform: scale(1.05) rotate(-2deg);
+  box-shadow: 4px 4px 0px var(--nb-black);
+}
+
+/* Loader Bubu & Dudu */
+.bubu-loader-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.loader-bubu-img {
+  width: 90px;
+  height: 90px;
+  border-radius: 20px;
+  border: 3px solid var(--nb-black);
+  box-shadow: 3.5px 3.5px 0px var(--nb-black);
+  animation: bubuFloat 3s ease-in-out infinite alternate;
+}
+
+.bubu-bubble-mini {
+  background: #fff0f3;
+  color: var(--nb-rose-deep);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.78rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--nb-radius-pill);
+  border: 1.5px solid var(--nb-black);
+  box-shadow: 1.5px 1.5px 0px var(--nb-black);
+}
+
+@keyframes bubuFloat {
+  0% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(-5px) rotate(2deg); }
+}
+
+/* Gate Screen Bubu & Dudu Helper */
+.bubu-gate-helper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 0.3rem 0 0.8rem;
+}
+
+.gate-bubu-img {
+  width: 68px;
+  height: 68px;
+  border-radius: 14px;
+}
+
+.bubu-speech-bubble {
+  background: #fff8f0;
+  border: 2px solid var(--nb-black);
+  box-shadow: 2.5px 2.5px 0px var(--nb-black);
+  border-radius: 12px;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--nb-brown-dark);
+  position: relative;
+  max-width: 200px;
+  text-align: left;
+  line-height: 1.25;
+}
+
+.bubu-speech-bubble::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 6px 8px 6px 0;
+  border-style: solid;
+  border-color: transparent var(--nb-black) transparent transparent;
+}
+
+/* Biomes Header Welcome Banner */
+.bubu-welcome-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+}
+
+.welcome-bubu-img,
+.welcome-bubu-img-right {
+  width: 72px;
+  height: 72px;
+  border-radius: 16px;
+  animation: bubuBounce 2.5s ease-in-out infinite alternate;
+}
+
+.welcome-bubu-img-right {
+  animation-delay: 1.2s;
+}
+
+@keyframes bubuBounce {
+  0% { transform: translateY(0px) rotate(-1deg); }
+  50% { transform: translateY(-6px) rotate(2deg); }
+  100% { transform: translateY(0px) rotate(-1deg); }
+}
+
+/* Mascot on Biome Quad Cards */
+.bubu-card-mascot {
+  position: absolute;
+  top: -14px;
+  right: -10px;
+  z-index: 10;
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  border: 2.5px solid var(--nb-black);
+  box-shadow: 2.5px 2.5px 0px var(--nb-black);
+  background: #ffffff;
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  pointer-events: none;
+}
+
+.bubu-card-mascot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.quad-card:hover .bubu-card-mascot {
+  transform: scale(1.18) rotate(6deg);
+  box-shadow: 3.5px 3.5px 0px var(--nb-black);
+}
+
+/* Hint Modal Companion */
+.bubu-hint-companion {
+  margin: 0.4rem 0 0.8rem;
+  display: flex;
+  justify-content: center;
+}
+
+.hint-bubu-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 16px;
+}
+
+/* Interactive Floating Bubu & Dudu Companion (Bottom-Right) */
+.bubu-floating-companion {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.bubu-floating-speech {
+  background: #ffffff;
+  border: 2.5px solid var(--nb-black);
+  box-shadow: 3px 3px 0px var(--nb-black);
+  border-radius: 14px;
+  padding: 0.6rem 0.9rem;
+  font-family: var(--font-display);
+  font-size: 0.84rem;
+  font-weight: 800;
+  color: var(--nb-rose-deep);
+  max-width: 220px;
+  line-height: 1.3;
+  text-align: center;
+  position: relative;
+  animation: speechPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.bubu-floating-speech::after {
+  content: '';
+  position: absolute;
+  bottom: -9px;
+  right: 25px;
+  border-width: 9px 8px 0 8px;
+  border-style: solid;
+  border-color: var(--nb-black) transparent transparent transparent;
+}
+
+.bubu-floating-btn {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  border: 3px solid var(--nb-black);
+  box-shadow: 4px 4px 0px var(--nb-black);
+  background: #fff0f3;
+  cursor: pointer;
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: visible;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.bubu-floating-btn:hover {
+  transform: scale(1.1) rotate(-4deg);
+  box-shadow: 5px 5px 0px var(--nb-black);
+}
+
+.bubu-floating-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: var(--nb-shadow-active);
+}
+
+.bubu-floating-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 15px;
+  display: block;
+}
+
+.bubu-floating-heart {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 1.2rem;
+  animation: heartPulse 1.4s ease-in-out infinite;
+}
+
+@keyframes heartPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+}
+
+@keyframes speechPop {
+  0% { transform: scale(0.6); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ==========================================
+   BOTÓN CORAZÓN BLANCO CON FONDO ROJO
+   ========================================== */
+.red-heart-btn {
+  position: fixed;
+  top: 1.1rem;
+  right: 1.1rem;
+  width: 48px;
+  height: 48px;
+  background-color: #ff2a5f;
+  border: 3px solid var(--nb-black);
+  border-radius: 50%;
+  box-shadow: 3px 3px 0px var(--nb-black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.15s ease, background-color 0.2s ease;
+}
+
+.red-heart-btn:hover {
+  transform: scale(1.12) rotate(6deg);
+  box-shadow: 4px 4px 0px var(--nb-black);
+  background-color: #e6194d;
+}
+
+.red-heart-btn:active {
+  transform: translate(2px, 2px) scale(0.96);
+  box-shadow: 1px 1px 0px var(--nb-black);
+}
+
+.red-heart-btn .white-heart-svg {
+  width: 24px;
+  height: 24px;
+  fill: #ffffff;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.15));
+}
+
+/* ==========================================
+   MINI REPRODUCTOR DE MÚSICA NEOBRUTALISTA
+   ========================================== */
+.mini-music-player {
+  position: fixed;
+  bottom: 1.2rem;
+  left: 1.2rem;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--nb-white, #ffffff);
+  border: 3px solid var(--nb-black, #1e1b18);
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem 0.35rem 0.45rem;
+  box-shadow: 3.5px 3.5px 0px var(--nb-black, #1e1b18);
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  user-select: none;
+}
+
+.mini-music-player:hover {
+  transform: translateY(-2px);
+  box-shadow: 5px 5px 0px var(--nb-black, #1e1b18);
+}
+
+.mmp-icon-disc {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--nb-rose-pastel, #ffb3c6);
+  border: 2px solid var(--nb-black, #1e1b18);
+  display: grid;
+  place-items: center;
+  font-size: 1.15rem;
+  cursor: pointer;
+  animation: mmpSpin 3.5s linear infinite;
+  animation-play-state: paused;
+  transition: transform 0.15s ease;
+}
+
+.mmp-icon-disc:hover {
+  transform: scale(1.08);
+}
+
+.mini-music-player.is-playing .mmp-icon-disc {
+  animation-play-state: running;
+}
+
+@keyframes mmpSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.mmp-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  max-width: 145px;
+}
+
+.mmp-title {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--nb-black, #1e1b18);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mmp-status {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--nb-brown-soft, #705858);
+}
+
+.mmp-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: 0.2rem;
+}
+
+.mmp-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--nb-black, #1e1b18);
+  background: var(--nb-cream, #fff6ea);
+  box-shadow: 1.5px 1.5px 0px var(--nb-black, #1e1b18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.15s ease, box-shadow 0.12s ease;
+  padding: 0;
+}
+
+.mmp-btn:hover {
+  transform: scale(1.12);
+  background: var(--nb-rose-light, #ffe3ec);
+  box-shadow: 2px 2px 0px var(--nb-black, #1e1b18);
+}
+
+.mmp-btn:active {
+  transform: translate(1px, 1px) scale(0.95);
+  box-shadow: 0px 0px 0px var(--nb-black, #1e1b18);
+}
+
+.mmp-btn-replay:hover {
+  transform: scale(1.12) rotate(-35deg);
+}
+
+/* Aviso sutil de autoplay si el navegador lo requiere */
+.mmp-autoplay-prompt {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 0;
+  background: #ffe3ec;
+  border: 2.5px solid var(--nb-black, #1e1b18);
+  border-radius: 14px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #1e1b18;
+  box-shadow: 2.5px 2.5px 0px var(--nb-black, #1e1b18);
+  white-space: nowrap;
+  animation: mmpBounce 1.4s infinite alternate;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+@keyframes mmpBounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(-5px); }
+}
+
+@media (max-width: 600px) {
+  /* Botón corazón rojo en móvil */
+  .red-heart-btn {
+    top: 0.75rem !important;
+    right: 0.75rem !important;
+    width: 42px !important;
+    height: 42px !important;
+    box-shadow: 2px 2px 0px var(--nb-black) !important;
+  }
+  .red-heart-btn .white-heart-svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  /* Mini Reproductor en móvil: compacto sin chocar */
+  .mini-music-player {
+    bottom: 0.6rem !important;
+    left: 0.6rem !important;
+    padding: 0.25rem 0.5rem 0.25rem 0.35rem !important;
+    gap: 0.35rem !important;
+    border-width: 2px !important;
+    box-shadow: 2.5px 2.5px 0px var(--nb-black) !important;
+    max-width: calc(100vw - 84px) !important;
+    z-index: 998 !important;
+  }
+  .mmp-icon-disc {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 0.9rem !important;
+    border-width: 1.5px !important;
+  }
+  .mmp-info {
+    max-width: 82px !important;
+  }
+  .mmp-title {
+    font-size: 0.68rem !important;
+  }
+  .mmp-status {
+    font-size: 0.56rem !important;
+  }
+  .mmp-btn {
+    width: 26px !important;
+    height: 26px !important;
+    font-size: 0.76rem !important;
+    border-width: 1.5px !important;
+  }
+
+  /* Companion Bubu & Dudu en móvil */
+  .bubu-floating-companion {
+    bottom: 0.6rem !important;
+    right: 0.6rem !important;
+    z-index: 999 !important;
+  }
+  .bubu-floating-btn {
+    width: 48px !important;
+    height: 48px !important;
+  }
+  .bubu-floating-img {
+    width: 40px !important;
+    height: 40px !important;
+  }
+  .bubu-floating-speech {
+    right: 0 !important;
+    bottom: calc(100% + 6px) !important;
+    max-width: 195px !important;
+    font-size: 0.72rem !important;
+    padding: 0.4rem 0.65rem !important;
+  }
+}
+
+
