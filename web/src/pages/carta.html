@@ -7,7 +7,7 @@
   <title>Mi Carta Para Ti ♡ Raquel</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;800;900&display=swap"
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Patrick+Hand&family=Space+Grotesk:wght@500;700;800;900&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="../src/css/style.css">
   <link rel="stylesheet" href="../src/css/components.css">
@@ -16,6 +16,7 @@
 <body>
 
   <div class="ambient-bg"></div>
+
   <main class="stage-screen">
     <div class="letter-card">
       <div style="display: flex; justify-content: center; gap: 0.8rem; align-items: center; margin-bottom: 0.5rem;">
@@ -25,19 +26,41 @@
       <div class="letter-stamp">💌</div>
       <span class="gummy-badge">Para mi Princesa Raquel ♡</span>
 
-      <h1 class="letter-title"> Mi Carta Para Ti</h1>
+      <h1 class="letter-title">Mi Carta Para Ti</h1>
+
+      <!-- Barra de Estado y Controles del Animador de Lápiz -->
+      <div class="letter-header-row">
+        <div class="letter-status-pill" id="letter-status-text">
+          <span class="pencil-live-dot"></span> Escribiendo con amor para ti...
+        </div>
+        <div style="display: flex; gap: 0.4rem; align-items: center;">
+          <button type="button" class="letter-control-btn" id="btn-skip-letter" title="Saltar animación y ver la carta completa">
+            ⏩ Ver completa
+          </button>
+          <button type="button" class="letter-control-btn" id="btn-replay-letter" style="display: none;" title="Ver cómo se escribe de nuevo">
+            🔄 Escribir de nuevo
+          </button>
+        </div>
+      </div>
+
+      <!-- Papel de Carta estilo Libreta con Tipografía a Lápiz Natural -->
       <div class="letter-body">
-        <p class="letter-greeting"> Mi amor hermosa,</p>
-        <p class="letter-paragraph">
-          Cada rincón de este mundo virtual y real tiene sentido porque estás tú. Como en Lyoko, donde cada sector
-          guarda un misterio, el misterio más grande y hermoso de mi vida ha sido encontrarte y enamorarme de cada una
-          de tus risas, tus detalles y tu forma única de brillar.
-        </p>
-        <p class="letter-paragraph">
-          Ni la piedra más preciosa del universo compite con la magia que tienes. Gracias por ser mi lugar seguro, mi
-          compañera de aventuras y el amor de mi vida.
-        </p>
-        <p class="letter-signature">Siempre tuyo, con todo mi corazón ♡</p>
+        <div class="letter-content" id="letter-content">
+          <!-- El texto a lápiz se escribe progresivamente aquí -->
+          <noscript>
+            <p class="letter-greeting-pencil">Mi amor hermosa,</p>
+            <p class="letter-paragraph-pencil">
+              Cada rincón de este mundo virtual y real tiene sentido porque estás tú. Como en Lyoko, donde cada sector
+              guarda un misterio, el misterio más grande y hermoso de mi vida ha sido encontrarte y enamorarme de cada una
+              de tus risas, tus detalles y tu forma única de brillar.
+            </p>
+            <p class="letter-paragraph-pencil">
+              Ni la piedra más preciosa del universo compite con la magia que tienes. Gracias por ser mi lugar seguro, mi
+              compañera de aventuras y el amor de mi vida.
+            </p>
+            <p class="letter-signature-pencil">Siempre tuyo, con todo mi corazón ♡</p>
+          </noscript>
+        </div>
       </div>
 
       <a href="../index.html#biomas" class="unlock-btn"
@@ -48,8 +71,46 @@
   </main>
 
   <script type="module">
+    import { LetterPencilAnimator } from '../src/js/letterAnimator.js';
     import { initMiniMusicPlayer } from '../src/js/components/miniMusicPlayer.js';
+
+    // Música romántica de fondo para la carta
     initMiniMusicPlayer({ biome: 'carta', title: 'Nuestra Carta de Amor ♡' });
+
+    // Iniciar la animación de escritura a lápiz
+    const animator = new LetterPencilAnimator({
+      container: document.getElementById('letter-content'),
+      statusEl: document.getElementById('letter-status-text'),
+      skipBtn: document.getElementById('btn-skip-letter'),
+      replayBtn: document.getElementById('btn-replay-letter'),
+      sections: [
+        {
+          type: 'greeting',
+          className: 'letter-greeting-pencil',
+          text: 'Mi amor hermosa,'
+        },
+        {
+          type: 'paragraph',
+          className: 'letter-paragraph-pencil',
+          text: 'Cada rincón de este mundo virtual y real tiene sentido porque estás tú. Como en Lyoko, donde cada sector guarda un misterio, el misterio más grande y hermoso de mi vida ha sido encontrarte y enamorarme de cada una de tus risas, tus detalles y tu forma única de brillar.'
+        },
+        {
+          type: 'paragraph',
+          className: 'letter-paragraph-pencil',
+          text: 'Ni la piedra más preciosa del universo compite con la magia que tienes. Gracias por ser mi lugar seguro, mi compañera de aventuras y el amor de mi vida.'
+        },
+        {
+          type: 'signature',
+          className: 'letter-signature-pencil',
+          text: 'Siempre tuyo, con todo mi corazón ♡'
+        }
+      ]
+    });
+
+    // Iniciar escritura tras breve pausa de entrada
+    setTimeout(() => {
+      animator.start();
+    }, 450);
   </script>
 </body>
 
