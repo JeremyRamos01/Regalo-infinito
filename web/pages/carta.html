@@ -43,74 +43,172 @@
         </div>
       </div>
 
-      <!-- Papel de Carta estilo Libreta con Tipografía a Lápiz Natural -->
-      <div class="letter-body">
+      <!-- Cuadro Principal de la Carta (Se ensancha y contiene todo el texto con holgura) -->
+      <div class="letter-body" id="letter-body-card">
         <div class="letter-content" id="letter-content">
-          <!-- El texto a lápiz se escribe progresivamente aquí -->
-          <noscript>
-            <p class="letter-greeting-pencil">Mi amor hermosa,</p>
-            <p class="letter-paragraph-pencil">
-              Cada rincón de este mundo virtual y real tiene sentido porque estás tú. Como en Lyoko, donde cada sector
-              guarda un misterio, el misterio más grande y hermoso de mi vida ha sido encontrarte y enamorarme de cada una
-              de tus risas, tus detalles y tu forma única de brillar.
-            </p>
-            <p class="letter-paragraph-pencil">
-              Ni la piedra más preciosa del universo compite con la magia que tienes. Gracias por ser mi lugar seguro, mi
-              compañera de aventuras y el amor de mi vida.
-            </p>
-            <p class="letter-signature-pencil">Siempre tuyo, con todo mi corazón ♡</p>
-          </noscript>
+          <!-- El texto a lápiz se irá escribiendo automáticamente aquí -->
         </div>
       </div>
 
+      <!-- Botón Volver a los Biomas perfectamente separado debajo de todo el cuadro -->
       <a href="../index.html#biomas" class="unlock-btn"
-        style="max-width: 280px; margin: 0 auto; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+        style="max-width: 280px; margin: 1.5rem auto 1rem auto; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
         ⬅ Volver a los Biomas
       </a>
     </div>
   </main>
 
-  <script type="module">
-    import { LetterPencilAnimator } from '../src/js/letterAnimator.js';
-    import { initMiniMusicPlayer } from '../src/js/components/miniMusicPlayer.js';
+  <script>
+    // Motor robusto de escritura a lápiz natural
+    const LETTER_SECTIONS = [
+      {
+        className: 'letter-greeting-pencil',
+        text: 'Mi amor hermosa,'
+      },
+      {
+        className: 'letter-paragraph-pencil',
+        text: 'Cada rincón de este mundo virtual y real tiene sentido porque estás tú. Como en Lyoko, donde cada sector guarda un misterio, el misterio más grande y hermoso de mi vida ha sido encontrarte y enamorarme de cada una de tus risas, tus detalles y tu forma única de brillar.'
+      },
+      {
+        className: 'letter-paragraph-pencil',
+        text: 'Ni la piedra más preciosa del universo compite con la magia que tienes. Gracias por ser mi lugar seguro, mi compañera de aventuras y el amor de mi vida.'
+      },
+      {
+        className: 'letter-signature-pencil',
+        text: 'Siempre tuyo, con todo mi corazón ♡'
+      }
+    ];
 
-    // Música romántica de fondo para la carta
-    initMiniMusicPlayer({ biome: 'carta', title: 'Nuestra Carta de Amor ♡' });
+    let typingTimeouts = [];
+    let isSkipped = false;
 
-    // Iniciar la animación de escritura a lápiz
-    const animator = new LetterPencilAnimator({
-      container: document.getElementById('letter-content'),
-      statusEl: document.getElementById('letter-status-text'),
-      skipBtn: document.getElementById('btn-skip-letter'),
-      replayBtn: document.getElementById('btn-replay-letter'),
-      sections: [
-        {
-          type: 'greeting',
-          className: 'letter-greeting-pencil',
-          text: 'Mi amor hermosa,'
-        },
-        {
-          type: 'paragraph',
-          className: 'letter-paragraph-pencil',
-          text: 'Cada rincón de este mundo virtual y real tiene sentido porque estás tú. Como en Lyoko, donde cada sector guarda un misterio, el misterio más grande y hermoso de mi vida ha sido encontrarte y enamorarme de cada una de tus risas, tus detalles y tu forma única de brillar.'
-        },
-        {
-          type: 'paragraph',
-          className: 'letter-paragraph-pencil',
-          text: 'Ni la piedra más preciosa del universo compite con la magia que tienes. Gracias por ser mi lugar seguro, mi compañera de aventuras y el amor de mi vida.'
-        },
-        {
-          type: 'signature',
-          className: 'letter-signature-pencil',
-          text: 'Siempre tuyo, con todo mi corazón ♡'
+    function clearTyping() {
+      typingTimeouts.forEach(t => clearTimeout(t));
+      typingTimeouts = [];
+    }
+
+    function renderFullLetter() {
+      const container = document.getElementById('letter-content');
+      if (!container) return;
+      container.innerHTML = '';
+      LETTER_SECTIONS.forEach(sec => {
+        const p = document.createElement('p');
+        p.className = sec.className;
+        p.textContent = sec.text;
+        container.appendChild(p);
+      });
+      finishLetter();
+    }
+
+    function finishLetter() {
+      clearTyping();
+      const caret = document.querySelector('.pencil-caret');
+      if (caret) caret.remove();
+
+      const statusEl = document.getElementById('letter-status-text');
+      const skipBtn = document.getElementById('btn-skip-letter');
+      const replayBtn = document.getElementById('btn-replay-letter');
+
+      if (statusEl) statusEl.innerHTML = '✨ Carta escrita con todo mi amor ♡';
+      if (skipBtn) skipBtn.style.display = 'none';
+      if (replayBtn) replayBtn.style.display = 'inline-flex';
+    }
+
+    function startPencilTyping() {
+      const container = document.getElementById('letter-content');
+      const statusEl = document.getElementById('letter-status-text');
+      const skipBtn = document.getElementById('btn-skip-letter');
+      const replayBtn = document.getElementById('btn-replay-letter');
+
+      if (!container) return;
+      clearTyping();
+      isSkipped = false;
+
+      container.innerHTML = '';
+      if (statusEl) statusEl.innerHTML = '<span class="pencil-live-dot"></span> Escribiendo con amor para ti...';
+      if (skipBtn) skipBtn.style.display = 'inline-flex';
+      if (replayBtn) replayBtn.style.display = 'none';
+
+      // Cursor de lápiz animado
+      const caret = document.createElement('span');
+      caret.className = 'pencil-caret';
+      caret.innerHTML = '✏️';
+
+      let secIdx = 0;
+
+      function typeSection() {
+        if (isSkipped || secIdx >= LETTER_SECTIONS.length) {
+          finishLetter();
+          return;
         }
-      ]
+
+        const sec = LETTER_SECTIONS[secIdx];
+        const p = document.createElement('p');
+        p.className = sec.className;
+        container.appendChild(p);
+        p.appendChild(caret);
+
+        let charIdx = 0;
+        const text = sec.text;
+
+        function typeChar() {
+          if (isSkipped) {
+            finishLetter();
+            return;
+          }
+
+          if (charIdx < text.length) {
+            const ch = text[charIdx];
+            p.insertBefore(document.createTextNode(ch), caret);
+            charIdx++;
+
+            let delay = 30 + Math.floor(Math.random() * 18);
+            if (ch === ',' || ch === ';') delay = 160;
+            else if (ch === '.' || ch === '!') delay = 300;
+            else if (ch === ' ') delay = 40;
+
+            const t = setTimeout(typeChar, delay);
+            typingTimeouts.push(t);
+          } else {
+            // Pausa entre párrafos
+            const t = setTimeout(() => {
+              secIdx++;
+              typeSection();
+            }, 380);
+            typingTimeouts.push(t);
+          }
+        }
+
+        typeChar();
+      }
+
+      typeSection();
+    }
+
+    // Inicializar botones y auto-escritura
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('btn-skip-letter')?.addEventListener('click', () => {
+        isSkipped = true;
+        renderFullLetter();
+      });
+
+      document.getElementById('btn-replay-letter')?.addEventListener('click', () => {
+        startPencilTyping();
+      });
+
+      // Iniciar de inmediato automáticamente
+      setTimeout(startPencilTyping, 350);
     });
 
-    // Iniciar escritura tras breve pausa de entrada
-    setTimeout(() => {
-      animator.start();
-    }, 450);
+    // Fallback si DOMContentLoaded ya pasó
+    if (document.readyState !== 'loading') {
+      setTimeout(startPencilTyping, 350);
+    }
+  </script>
+
+  <script type="module">
+    import { initMiniMusicPlayer } from '../src/js/components/miniMusicPlayer.js';
+    initMiniMusicPlayer({ biome: 'carta', title: 'Nuestra Carta de Amor ♡' });
   </script>
 </body>
 
