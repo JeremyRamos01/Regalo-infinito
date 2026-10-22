@@ -377,7 +377,8 @@ export async function fetchBiomeMusicUrl(biomeKey) {
     desierto: 'desierto.mp3',
     hielo: 'hielo.mp3',
     carta: 'carta.mp3',
-    roca: 'roca.mp3'
+    roca: 'roca.mp3',
+    lyoko: 'lyoko.mp3'
   };
 
   const fileName = EXACT_FILES[targetBiome] || `${targetBiome}.mp3`;

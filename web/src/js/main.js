@@ -3,6 +3,106 @@ import { runLyokoLoader } from './animations/loaderAnimation.js';
 import { initChiclosoCodeGate } from './animations/codeGateAnimation.js';
 import { showMainLyokoPage } from './animations/mainPageAnimation.js';
 import { renderSectors } from '../components/sectors.js';
+import { fetchBiomeMusicUrl } from './services/firebase.js';
+
+let lyokoAudio = null;
+let lyokoFadeTimer = null;
+
+function getLyokoAudio() {
+  if (!lyokoAudio) {
+    lyokoAudio = new Audio();
+    lyokoAudio.loop = true;
+    lyokoAudio.volume = 0.85;
+    lyokoAudio.preload = 'auto';
+
+    // 1. URL directa por defecto de Firebase Storage
+    const defaultUrl = 'https://firebasestorage.googleapis.com/v0/b/raquel-5f8dc.firebasestorage.app/o/lyoko.mp3?alt=media';
+    const folderUrl = 'https://firebasestorage.googleapis.com/v0/b/raquel-5f8dc.firebasestorage.app/o/canciiones%2Flyoko.mp3?alt=media';
+    lyokoAudio.src = defaultUrl;
+
+    // Respaldo automático si la raíz falla
+    lyokoAudio.addEventListener('error', () => {
+      if (lyokoAudio && !lyokoAudio.dataset.triedFolder) {
+        lyokoAudio.dataset.triedFolder = 'true';
+        lyokoAudio.src = folderUrl;
+        lyokoAudio.play().catch(() => {});
+      }
+    });
+
+    // 2. En paralelo consultar Firebase Storage para URL fresca si está disponible
+    try {
+      fetchBiomeMusicUrl('lyoko').then(res => {
+        if (res && res.url && lyokoAudio) {
+          const wasPlaying = !lyokoAudio.paused;
+          lyokoAudio.src = res.url;
+          if (wasPlaying) lyokoAudio.play().catch(() => {});
+        }
+      }).catch(() => {});
+    } catch (e) {}
+  }
+  return lyokoAudio;
+}
+
+export function playLyokoMusic() {
+  const audio = getLyokoAudio();
+  if (lyokoFadeTimer) {
+    clearInterval(lyokoFadeTimer);
+    lyokoFadeTimer = null;
+  }
+  audio.volume = 0.85;
+
+  const tryPlay = () => {
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        updateMusicIndicator(true);
+      }).catch(() => {
+        // Bloqueo de autoplay del navegador: reproducir al primer clic/toque del usuario
+        updateMusicIndicator(false);
+        const resumeOnInteraction = () => {
+          if (document.getElementById('main-app')?.classList.contains('is-hidden')) {
+            audio.play().then(() => updateMusicIndicator(true)).catch(() => {});
+          }
+          window.removeEventListener('click', resumeOnInteraction);
+          window.removeEventListener('touchstart', resumeOnInteraction);
+          window.removeEventListener('keydown', resumeOnInteraction);
+        };
+        window.addEventListener('click', resumeOnInteraction, { once: true });
+        window.addEventListener('touchstart', resumeOnInteraction, { once: true });
+        window.addEventListener('keydown', resumeOnInteraction, { once: true });
+      });
+    }
+  };
+
+  tryPlay();
+}
+
+export function stopLyokoMusic() {
+  if (!lyokoAudio) return;
+  if (lyokoFadeTimer) clearInterval(lyokoFadeTimer);
+
+  // Fade out suave de 0.8s
+  lyokoFadeTimer = setInterval(() => {
+    if (lyokoAudio && lyokoAudio.volume > 0.1) {
+      lyokoAudio.volume = Math.max(0, lyokoAudio.volume - 0.1);
+    } else {
+      clearInterval(lyokoFadeTimer);
+      lyokoFadeTimer = null;
+      if (lyokoAudio) {
+        lyokoAudio.pause();
+        lyokoAudio.currentTime = 0;
+        updateMusicIndicator(false);
+      }
+    }
+  }, 60);
+}
+
+function updateMusicIndicator(isPlaying) {
+  const btn = document.getElementById('lyoko-music-btn');
+  const text = document.getElementById('lyoko-music-text');
+  if (btn) btn.classList.toggle('is-playing', isPlaying);
+  if (text) text.textContent = isPlaying ? 'Música de Lyoko ♪' : 'Activar música 🎵';
+}
 
 function logLyokoAccess(codeUsed) {
   try {
@@ -23,6 +123,9 @@ function startApp() {
   // Configuración del botón de corazón blanco con fondo rojo
   setupRedHeartLockBtn();
 
+  // Botón manual de música
+  setupMusicIndicatorBtn();
+
   // Si viene explícitamente de pulsar "Volver a los Biomas" desde un sector (#biomas)
   const isDirectBiomaReturn = window.location.hash.includes('biomas') && sessionStorage.getItem('lyoko_unlocked') === 'true';
 
@@ -31,6 +134,7 @@ function startApp() {
     history.replaceState(null, null, window.location.pathname);
     document.getElementById('loader-screen')?.classList.add('is-hidden');
     document.getElementById('gate-screen')?.classList.add('is-hidden');
+    stopLyokoMusic();
     showMainLyokoPage();
   } else {
     // Al recargar o entrar normalmente: SIEMPRE mostrar la pantalla de carga primero
@@ -42,6 +146,9 @@ function startApp() {
     document.getElementById('gate-screen')?.classList.add('is-hidden');
     document.getElementById('main-app')?.classList.add('is-hidden');
     document.getElementById('loader-screen')?.classList.remove('is-hidden');
+
+    // ¡Empezar a sonar inmediatamente con la barra de carga!
+    playLyokoMusic();
 
     runLyokoLoader(() => {
       openCodeGateScreen();
@@ -235,12 +342,33 @@ function openCodeGateScreen() {
 
   if (gateScreen) {
     gateScreen.classList.remove('is-hidden');
+    // Asegurar que la música de Lyoko continúe sonando durante el código de acceso
+    if (lyokoAudio && lyokoAudio.paused) {
+      playLyokoMusic();
+    }
     initChiclosoCodeGate(() => {
       sessionStorage.setItem('lyoko_unlocked', 'true');
       logLyokoAccess('2206');
+      // ¡Detener suavemente la canción al resolver el código y pasar al selector de biomas!
+      stopLyokoMusic();
       showMainLyokoPage();
     });
   }
+}
+
+function setupMusicIndicatorBtn() {
+  const btn = document.getElementById('lyoko-music-btn');
+  if (!btn) return;
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const audio = getLyokoAudio();
+    if (audio.paused) {
+      playLyokoMusic();
+    } else {
+      audio.pause();
+      updateMusicIndicator(false);
+    }
+  });
 }
 
 function setupRedHeartLockBtn() {
@@ -256,8 +384,9 @@ function setupRedHeartLockBtn() {
     // 2. Limpiar la memoria de desbloqueo
     sessionStorage.removeItem('lyoko_unlocked');
 
-    // 3. Abrir inmediatamente el panel de código inicial
+    // 3. Abrir inmediatamente el panel de código inicial y reanudar música
     openCodeGateScreen();
+    playLyokoMusic();
   });
 }
 

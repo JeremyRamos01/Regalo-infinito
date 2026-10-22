@@ -20,7 +20,10 @@ export function runLyokoLoader(onComplete) {
     if (fillEl) fillEl.style.width = `${v}%`;
     if (heartEl) heartEl.style.opacity = v > 1 ? '1' : '0';
     if (statusEl) {
-      if (v < 100) statusEl.textContent = 'Conectando... ♡';
+      if (v < 25) statusEl.textContent = 'Sintonizando nuestro universo... ♡';
+      else if (v < 55) statusEl.textContent = 'Cargando recuerdos mágicos... ♡';
+      else if (v < 80) statusEl.textContent = 'Conectando corazones... ♡';
+      else if (v < 100) statusEl.textContent = 'Entrando en Lyoko... ♡';
       else statusEl.textContent = '¡Conectado! ♡';
     }
   }
@@ -29,17 +32,17 @@ export function runLyokoLoader(onComplete) {
 
   function finishLoader() {
     if (loaderCard) {
-      loaderCard.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+      loaderCard.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
       loaderCard.style.opacity = '0';
       loaderCard.style.transform = 'translateY(-8px)';
     }
     setTimeout(() => {
       if (loaderScreen) loaderScreen.classList.add('is-hidden');
       if (typeof onComplete === 'function') onComplete();
-    }, 250);
+    }, 350);
   }
 
-  // Animación suave y directa de la barra de carga
+  // Animación suave y directa de la barra de carga (más lenta y romántica)
   if (typeof anime === 'function') {
     try {
       const progressTracker = { progress: 0 };
@@ -47,8 +50,8 @@ export function runLyokoLoader(onComplete) {
         targets: progressTracker,
         progress: 100,
         round: 1,
-        duration: 2800,
-        easing: 'easeInOutCubic',
+        duration: 6200,
+        easing: 'easeInOutQuad',
         update: (anim) => {
           const v = Math.min(100, Math.max(0, Math.round(anim.progress)));
           updateStatus(v);
@@ -65,7 +68,7 @@ export function runLyokoLoader(onComplete) {
   }
 
   // Fallback nativo
-  const duration = 2600;
+  const duration = 6200;
   const startTime = performance.now();
 
   function animateNative(now) {
