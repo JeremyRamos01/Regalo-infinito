@@ -68,7 +68,7 @@ export function runLyokoLoader(onComplete) {
   }
 
   // Fallback nativo
-  const duration = 6200;
+  const duration = 10200;
   const startTime = performance.now();
 
   function animateNative(now) {
