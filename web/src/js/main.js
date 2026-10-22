@@ -15,16 +15,16 @@ function getLyokoAudio() {
     lyokoAudio.volume = 0.85;
     lyokoAudio.preload = 'auto';
 
-    // 1. URL directa por defecto de Firebase Storage
-    const defaultUrl = 'https://firebasestorage.googleapis.com/v0/b/raquel-5f8dc.firebasestorage.app/o/lyoko.mp3?alt=media';
-    const folderUrl = 'https://firebasestorage.googleapis.com/v0/b/raquel-5f8dc.firebasestorage.app/o/canciiones%2Flyoko.mp3?alt=media';
-    lyokoAudio.src = defaultUrl;
+    // 1. URL directa comprobada de Firebase Storage (carpeta canciones/lyoko.mp3)
+    const directUrl = 'https://firebasestorage.googleapis.com/v0/b/raquel-5f8dc.firebasestorage.app/o/canciones%2Flyoko.mp3?alt=media';
+    const fallbackRootUrl = 'https://firebasestorage.googleapis.com/v0/b/raquel-5f8dc.firebasestorage.app/o/lyoko.mp3?alt=media';
+    lyokoAudio.src = directUrl;
 
-    // Respaldo automático si la raíz falla
+    // Respaldo automático si la ruta primaria tuviese problemas
     lyokoAudio.addEventListener('error', () => {
-      if (lyokoAudio && !lyokoAudio.dataset.triedFolder) {
-        lyokoAudio.dataset.triedFolder = 'true';
-        lyokoAudio.src = folderUrl;
+      if (lyokoAudio && !lyokoAudio.dataset.triedFallback) {
+        lyokoAudio.dataset.triedFallback = 'true';
+        lyokoAudio.src = fallbackRootUrl;
         lyokoAudio.play().catch(() => {});
       }
     });
@@ -32,7 +32,7 @@ function getLyokoAudio() {
     // 2. En paralelo consultar Firebase Storage para URL fresca si está disponible
     try {
       fetchBiomeMusicUrl('lyoko').then(res => {
-        if (res && res.url && lyokoAudio) {
+        if (res && res.url && lyokoAudio && lyokoAudio.src !== res.url) {
           const wasPlaying = !lyokoAudio.paused;
           lyokoAudio.src = res.url;
           if (wasPlaying) lyokoAudio.play().catch(() => {});
@@ -42,6 +42,11 @@ function getLyokoAudio() {
   }
   return lyokoAudio;
 }
+
+// Pre-cargar el audio de Lyoko en segundo plano para arranque instantáneo con la barra de carga
+try {
+  getLyokoAudio();
+} catch (e) {}
 
 export function playLyokoMusic() {
   const audio = getLyokoAudio();
@@ -57,16 +62,18 @@ export function playLyokoMusic() {
       playPromise.then(() => {
         updateMusicIndicator(true);
       }).catch(() => {
-        // Bloqueo de autoplay del navegador: reproducir al primer clic/toque del usuario
+        // Bloqueo de autoplay del navegador: reproducir inmediatamente con el primer clic, toque o interacción
         updateMusicIndicator(false);
         const resumeOnInteraction = () => {
           if (document.getElementById('main-app')?.classList.contains('is-hidden')) {
             audio.play().then(() => updateMusicIndicator(true)).catch(() => {});
           }
+          window.removeEventListener('pointerdown', resumeOnInteraction);
           window.removeEventListener('click', resumeOnInteraction);
           window.removeEventListener('touchstart', resumeOnInteraction);
           window.removeEventListener('keydown', resumeOnInteraction);
         };
+        window.addEventListener('pointerdown', resumeOnInteraction, { once: true });
         window.addEventListener('click', resumeOnInteraction, { once: true });
         window.addEventListener('touchstart', resumeOnInteraction, { once: true });
         window.addEventListener('keydown', resumeOnInteraction, { once: true });
@@ -362,6 +369,10 @@ function setupMusicIndicatorBtn() {
   btn.addEventListener('click', (e) => {
     e.stopPropagation();
     const audio = getLyokoAudio();
+    if (lyokoFadeTimer) {
+      clearInterval(lyokoFadeTimer);
+      lyokoFadeTimer = null;
+    }
     if (audio.paused) {
       playLyokoMusic();
     } else {

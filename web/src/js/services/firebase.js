@@ -383,13 +383,13 @@ export async function fetchBiomeMusicUrl(biomeKey) {
 
   const fileName = EXACT_FILES[targetBiome] || `${targetBiome}.mp3`;
 
-  // 1. Búsqueda directa por getDownloadURL (en raíz y en carpetas canciiones / canciones)
+  // 1. Búsqueda directa por getDownloadURL (priorizando la carpeta canciones)
   const candidatePaths = [
+    `canciones/${fileName}`,
     fileName,
     `canciiones/${fileName}`,
-    `canciones/${fileName}`,
-    `Canciiones/${fileName}`,
-    `Canciones/${fileName}`
+    `Canciones/${fileName}`,
+    `Canciiones/${fileName}`
   ];
 
   for (const path of candidatePaths) {
@@ -406,7 +406,7 @@ export async function fetchBiomeMusicUrl(biomeKey) {
   }
 
   // 2. Si no la encuentra por nombre directo, buscar en listAll EXCLUSIVAMENTE archivos que contengan el nombre del bioma
-  const foldersToScan = ['', 'canciiones', 'canciones', 'Canciiones', 'Canciones'];
+  const foldersToScan = ['canciones', '', 'canciiones', 'Canciones', 'Canciiones'];
   for (const f of foldersToScan) {
     try {
       const folderRef = ref(storage, f);
