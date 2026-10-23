@@ -145,11 +145,46 @@ const TIMELINE_EVENTS = [
   }
 ];
 
-let savedMediaMap = {};
+// Medios de Firebase Storage en la carpeta 'videos' precargados para visualización instantánea (0ms de espera)
+const DEFAULT_HIELO_MEDIA = {
+  "20-febrero": {
+    url: "https://firebasestorage.googleapis.com/v0/b/raquel-5f8dc.firebasestorage.app/o/videos%2F20-febrero_1792748222004.mp4?alt=media",
+    type: "video",
+    fileName: "20-febrero_1792748222004.mp4"
+  },
+  "3-marzo": {
+    url: "https://firebasestorage.googleapis.com/v0/b/raquel-5f8dc.firebasestorage.app/o/videos%2F3-marzo_1792748740400.mp4?alt=media",
+    type: "video",
+    fileName: "3-marzo_1792748740400.mp4"
+  },
+  "21-marzo": {
+    url: "https://firebasestorage.googleapis.com/v0/b/raquel-5f8dc.firebasestorage.app/o/videos%2F21-marzo_1792748764672.jpeg?alt=media",
+    type: "image",
+    fileName: "21-marzo_1792748764672.jpeg"
+  },
+  "21-julio": {
+    url: "https://firebasestorage.googleapis.com/v0/b/raquel-5f8dc.firebasestorage.app/o/videos%2F21-julio_1792748775899.jpeg?alt=media",
+    type: "image",
+    fileName: "21-julio_1792748775899.jpeg"
+  },
+  "momento-memorable": {
+    url: "https://firebasestorage.googleapis.com/v0/b/raquel-5f8dc.firebasestorage.app/o/videos%2Fmomento-memorable_1792748784731.mp4?alt=media",
+    type: "video",
+    fileName: "momento-memorable_1792748784731.mp4"
+  },
+  "22-julio": {
+    url: "https://firebasestorage.googleapis.com/v0/b/raquel-5f8dc.firebasestorage.app/o/videos%2F22-julio_1792749493197.mp4?alt=media",
+    type: "video",
+    fileName: "22-julio_1792749493197.mp4"
+  }
+};
 
-// 1. Cargar lo que tengamos en localStorage de forma preliminar
+let savedMediaMap = Object.assign({}, DEFAULT_HIELO_MEDIA);
+
+// Complementar con caché local si existe
 try {
-  savedMediaMap = JSON.parse(localStorage.getItem('hielo_timeline_media') || '{}');
+  const local = JSON.parse(localStorage.getItem('hielo_timeline_media') || '{}');
+  Object.assign(savedMediaMap, local);
 } catch (e) { }
 
 async function saveMediaLocally(milestoneId, file, onProgress) {
@@ -266,13 +301,14 @@ function refreshMediaElements() {
   });
 }
 
-async function startHielo() {
+function startHielo() {
   initTimeline();
   setupScrollReveal();
   setupScrollProgressBar();
   setupBubuCompanion();
-  await syncAllSavedMedia();
   initMiniMusicPlayer({ biome: 'hielo', title: 'Sector Hielo ♡' });
+  // Sincronizar cualquier cambio nuevo en segundo plano sin demorar la carga inicial
+  syncAllSavedMedia();
 }
 
 if (document.readyState === 'loading') {
