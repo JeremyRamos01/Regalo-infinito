@@ -153,50 +153,65 @@ try {
 } catch (e) { }
 
 async function saveMediaLocally(milestoneId, file, onProgress) {
-  const isVideo = file.type.startsWith('video/');
-  onProgress(20);
+  const isVideo = file.type.startsWith('video/') || /\.(mp4|mov|webm|m4v|avi|mkv)$/i.test(file.name);
+  onProgress(10);
 
-  let mediaData = {
-    url: '',
-    type: isVideo ? 'video' : 'image',
-    fileName: file.name,
-    uploadedAt: new Date().toISOString()
-  };
+  let mediaData = null;
 
-  // 1. Subida al servidor local (Node.js) para guardado permanente en disco duro
+  // 1. PRIORIDAD ABSOLUTA: Subir a Firebase Storage en la carpeta 'videos'
   try {
-    onProgress(40);
-    const resp = await fetch('/api/upload-media', {
-      method: 'POST',
-      headers: {
-        'x-milestone-id': milestoneId,
-        'x-file-name': encodeURIComponent(file.name),
-        'content-type': file.type || 'application/octet-stream'
-      },
-      body: file
-    });
-    if (resp.ok) {
-      const json = await resp.json();
-      if (json && json.media) {
-        mediaData = json.media;
+    const fb = await import('./services/firebase.js');
+    if (fb && fb.uploadTimelineMedia) {
+      onProgress(20);
+      mediaData = await fb.uploadTimelineMedia(milestoneId, file, (pct) => {
+        onProgress(Math.min(95, Math.max(20, Math.round(20 + pct * 0.75))));
+      });
+      if (mediaData && mediaData.url) {
+        savedMediaMap[milestoneId] = mediaData;
+        console.log(`[Hielo] Recuerdo guardado con éxito en Firebase Storage (videos):`, mediaData);
       }
     }
   } catch (err) {
-    console.warn("[Upload local server falló, probando dataUrl]:", err);
+    console.warn("[Firebase Storage upload]:", err);
   }
 
-  // 2. Si no hubo URL del servidor local, generar DataURL
-  if (!mediaData.url) {
+  // 2. Si Firebase falló por falta de red, intentar servidor local de respaldo
+  if (!mediaData || !mediaData.url) {
+    try {
+      const resp = await fetch('/api/upload-media', {
+        method: 'POST',
+        headers: {
+          'x-milestone-id': milestoneId,
+          'x-file-name': encodeURIComponent(file.name),
+          'content-type': file.type || 'application/octet-stream'
+        },
+        body: file
+      });
+      if (resp.ok) {
+        const json = await resp.json();
+        if (json && json.media) {
+          mediaData = json.media;
+        }
+      }
+    } catch (e) {}
+  }
+
+  // 3. Fallback a DataURL para visualización instantánea local
+  if (!mediaData || !mediaData.url) {
     const dataUrl = await new Promise((resolve) => {
       const reader = new FileReader();
       reader.onload = (e) => resolve(e.target.result);
       reader.readAsDataURL(file);
     });
-    mediaData.url = dataUrl;
+    mediaData = {
+      url: dataUrl,
+      type: isVideo ? 'video' : 'image',
+      fileName: file.name,
+      uploadedAt: new Date().toISOString()
+    };
   }
-  onProgress(70);
 
-  // 3. Guardar en localStorage de respaldo (si no excede la cuota)
+  // Guardar en caché local
   try {
     const localStore = JSON.parse(localStorage.getItem('hielo_timeline_media') || '{}');
     localStore[milestoneId] = mediaData;
@@ -204,23 +219,6 @@ async function saveMediaLocally(milestoneId, file, onProgress) {
   } catch (e) {
     console.warn("[LocalStorage quota]:", e.message);
   }
-
-  onProgress(90);
-
-  // 4. Intentar sincronizar también con Firebase Storage y Firestore
-  try {
-    const fb = await import('./services/firebase.js');
-    if (fb && fb.uploadTimelineMedia) {
-      fb.uploadTimelineMedia(milestoneId, file).then(fbMedia => {
-        if (fbMedia && fbMedia.url && !fbMedia.url.startsWith('data:')) {
-          mediaData = fbMedia;
-          savedMediaMap[milestoneId] = fbMedia;
-        }
-      }).catch((e) => {
-        console.warn("[Firebase Storage status]:", e.message);
-      });
-    }
-  } catch (e) { }
 
   onProgress(100);
   return mediaData;

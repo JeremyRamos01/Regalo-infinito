@@ -37,18 +37,22 @@ export function getFirebaseApp() {
  */
 export async function uploadTimelineMedia(milestoneId, file, onProgress = () => {}) {
   const { storage, db } = getFirebaseApp();
-  const isVideo = file.type.startsWith('video/');
+  const isVideo = file.type.startsWith('video/') || /\.(mp4|mov|webm|m4v|avi|mkv)$/i.test(file.name);
   const ext = file.name.split('.').pop() || (isVideo ? 'mp4' : 'jpg');
   const safeFileName = `${milestoneId}_${Date.now()}.${ext}`;
-  const storagePath = `hielo_timeline/${safeFileName}`;
+  // Guardar en la carpeta 'videos' de Firebase Storage
+  const storagePath = `videos/${safeFileName}`;
 
   let downloadUrl = '';
 
-  // 1. Intentar subir a Firebase Storage
+  // 1. Subida directa a Firebase Storage en la carpeta 'videos'
   if (storage) {
     try {
       const storageRef = ref(storage, storagePath);
-      const uploadTask = uploadBytesResumable(storageRef, file);
+      const metadata = {
+        contentType: file.type || (isVideo ? 'video/mp4' : 'image/jpeg')
+      };
+      const uploadTask = uploadBytesResumable(storageRef, file, metadata);
 
       await new Promise((resolve, reject) => {
         uploadTask.on('state_changed', 
@@ -63,12 +67,13 @@ export async function uploadTimelineMedia(milestoneId, file, onProgress = () => 
           }
         );
       });
+      console.log(`[Upload Firebase] ¡Archivo subido con éxito a videos/${safeFileName}!`);
     } catch (err) {
-      console.warn("[Upload Storage]:", err.message);
+      console.warn("[Upload Storage videos]:", err.message);
     }
   }
 
-  // 2. Si no hay storage o falló, usar Data URL local de respaldo
+  // 2. Si no hay storage o falló la conexión, usar Data URL de respaldo
   if (!downloadUrl) {
     downloadUrl = await new Promise((resolve) => {
       const reader = new FileReader();
@@ -81,11 +86,13 @@ export async function uploadTimelineMedia(milestoneId, file, onProgress = () => 
     url: downloadUrl,
     type: isVideo ? 'video' : 'image',
     fileName: file.name,
+    storagePath: storagePath,
+    milestoneId: milestoneId,
     uploadedAt: new Date().toISOString()
   };
 
-  // Guardar en Firestore para que sea visible desde cualquier dispositivo
-  if (db) {
+  // Guardar en Firestore para persistencia permanente en todos los dispositivos
+  if (db && !downloadUrl.startsWith('data:')) {
     try {
       await setDoc(doc(db, "hielo_hitos", milestoneId), mediaData, { merge: true });
     } catch (e) {
@@ -93,7 +100,7 @@ export async function uploadTimelineMedia(milestoneId, file, onProgress = () => 
     }
   }
 
-  // Respaldo inmediato en localStorage
+  // Respaldo en localStorage
   try {
     const localStore = JSON.parse(localStorage.getItem('hielo_timeline_media') || '{}');
     localStore[milestoneId] = mediaData;
@@ -104,27 +111,102 @@ export async function uploadTimelineMedia(milestoneId, file, onProgress = () => 
 }
 
 /**
- * Obtiene los archivos multimedia subidos de todos los hitos del Sector Hielo
+ * Obtiene los archivos multimedia de todos los hitos del Sector Hielo
+ * (Escanea la carpeta 'videos' de Firebase Storage + Firestore 'hielo_hitos')
  */
 export async function fetchTimelineMedia() {
-  const { db } = getFirebaseApp();
+  const { storage, db } = getFirebaseApp();
   const results = {};
 
-  // Primero recuperar lo local
+  // 1. Recuperar caché local primero
   try {
     const local = JSON.parse(localStorage.getItem('hielo_timeline_media') || '{}');
     Object.assign(results, local);
   } catch (e) {}
 
-  // Luego sincronizar con Firestore
+  // 2. Escanear directamente la carpeta 'videos' (y variantes) en Firebase Storage
+  if (storage) {
+    const foldersToScan = ['videos', 'Videos', 'hielo_timeline'];
+    const unassignedItems = [];
+
+    const KNOWN_MILESTONES = [
+      '18-enero', '28-enero', '14-febrero', '20-febrero', '24-febrero',
+      '2-marzo', '3-marzo', '4-marzo', '21-marzo', '10-abril',
+      'mayo-julio', '21-julio', 'momento-memorable', '22-julio', 'presente'
+    ];
+
+    for (const folder of foldersToScan) {
+      try {
+        const folderRef = ref(storage, folder);
+        const res = await listAll(folderRef);
+        for (const itemRef of res.items) {
+          try {
+            const url = await getDownloadURL(itemRef);
+            const lowerName = itemRef.name.toLowerCase();
+            const isVideo = /\.(mp4|mov|webm|m4v|avi|mkv)$/i.test(lowerName);
+            const mediaObj = {
+              url,
+              type: isVideo ? 'video' : 'image',
+              fileName: itemRef.name,
+              storagePath: `${folder}/${itemRef.name}`,
+              source: 'storage'
+            };
+
+            let matchedId = null;
+            // Coincidencia exacta con ID o por partes
+            for (const mId of KNOWN_MILESTONES) {
+              const cleanMId = mId.replace(/-/g, '');
+              const cleanName = lowerName.replace(/[-_]/g, '');
+              if (lowerName.includes(mId) || cleanName.includes(cleanMId)) {
+                matchedId = mId;
+                break;
+              }
+            }
+
+            if (!matchedId) {
+              const prefixMatch = itemRef.name.split('_')[0];
+              if (KNOWN_MILESTONES.includes(prefixMatch)) {
+                matchedId = prefixMatch;
+              }
+            }
+
+            if (matchedId) {
+              results[matchedId] = mediaObj;
+            } else {
+              unassignedItems.push(mediaObj);
+            }
+          } catch (e) {
+            console.warn(`[Error URL item ${itemRef.name}]:`, e);
+          }
+        }
+      } catch (e) {
+        // Carpeta vacía o no creada aún
+      }
+    }
+
+    // Si hay archivos en 'videos' que no tienen fecha en el nombre, asociarlos a hitos clave vacíos
+    if (unassignedItems.length > 0) {
+      const KEY_MILESTONES = ['20-febrero', '3-marzo', '21-marzo', '21-julio', 'momento-memorable', '22-julio'];
+      for (const keyId of KEY_MILESTONES) {
+        if (!results[keyId] && unassignedItems.length > 0) {
+          results[keyId] = unassignedItems.shift();
+        }
+      }
+    }
+  }
+
+  // 3. Sincronizar con Firestore (hielo_hitos) para obtener cualquier documento registrado
   if (db) {
     try {
       const snap = await getDocs(collection(db, "hielo_hitos"));
       snap.forEach(docSnap => {
-        results[docSnap.id] = docSnap.data();
+        const data = docSnap.data();
+        if (data && data.url) {
+          results[docSnap.id] = data;
+        }
       });
     } catch (e) {
-      console.warn("[Fetch Hielo Hitos]:", e.message);
+      console.warn("[Fetch Hielo Hitos Firestore]:", e.message);
     }
   }
 
