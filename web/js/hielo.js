@@ -3,22 +3,12 @@ import { initMiniMusicPlayer } from './components/miniMusicPlayer.js';
 
 const TIMELINE_EVENTS = [
   {
-    id: "7-enero",
-    date: "7 de Enero de 2026",
-    tag: "Nuestras miradas",
-    icon: "✨",
-    title: "El día que nos miramos",
-    desc: "Día en el cual nuestras miradas por primera vez llegaron a divisar un futuro tan brillante como mi amor por ti.",
-    quote: "— Ese instante en el que supe que algo muy especial estaba por empezar.",
-    isKeyDate: true
-  },
-  {
     id: "18-enero",
     date: "18 de Enero de 2026",
     tag: "El primer 'Wenas'",
     icon: "👋",
     title: "Ese primer mensaje que lo cambió todo",
-    desc: "Vi tu foto y no me pude aguantar las ganas de escribirte aquel 'Wenas Raqueeeeeel'. Me dijiste que andabas a tope estudiando, y yo con cualquier excusa te pregunté por tus exámenes para seguir sacándote charla. Ahí empezó lo mejor que me ha pasado.",
+    desc: "Vi tu foto y no me pude aguantar las ganas de escribirte aquel 'Wenas Raqueeeeeel'. Me dijiste que andabas estudiando, y yo con cualquier excusa te pregunté por tus exámenes para seguir sacándote conversación. Ahí empezó lo mejor que me ha pasado.",
     quote: "— 'Joe q mal y todavía le faltan exámenes? Por cierto que tal el examen del otro day? 👀'"
   },
   {
@@ -36,17 +26,17 @@ const TIMELINE_EVENTS = [
     tag: "San Valentín",
     icon: "💌",
     title: "Nuestro primer 14 de Febrero",
-    desc: "Apenas llevábamos un mes hablando y ya sentía que te conocía de toda la vida. Fue un día lleno de mensajitos lindos y de darme cuenta de lo afortunado que soy de tenerte en mi camino.",
+    desc: "Apenas llevábamos un mes hablando y ya sentía que te conocía de toda la vida.",
     quote: "— 'Gracias por estar aquí Raquel, haces que todo sea mucho más bonito.'"
   },
   {
     id: "20-febrero",
     date: "20 de Febrero de 2026",
-    tag: "Comenzar nuestra vida",
+    tag: "Día especial",
     icon: "🌸",
-    title: "El inicio de nuestra Vida Feliz",
+    title: "20 de Febrero",
     desc: "Este fue el día en el que tú y yo decidimos comenzar con lo que las personas conocen como: Vida Feliz. Llevaba tanto tiempo esperándote que pensé que eras irreal hasta que me di cuenta de que sí estás aquí conmigo.",
-    quote: "— 'Llevaba tanto tiempo esperándote...'",
+    quote: "",
     isKeyDate: true
   },
   {
@@ -70,11 +60,11 @@ const TIMELINE_EVENTS = [
   {
     id: "3-marzo",
     date: "3 de Marzo de 2026",
-    tag: "El calor del otro",
+    tag: "Día especial",
     icon: "🌟",
-    title: "Superándolo todo juntos",
+    title: "3 de Marzo",
     desc: "Este día, luego de la guerra de tus padres jejee, nos vimos de arriba a abajo y todo nuestro corazón por primera vez conoció el calor del otro.",
-    quote: "— 'Por primera vez nuestro corazón conoció el calor del otro ♡'",
+    quote: "",
     isKeyDate: true
   },
   {
@@ -89,11 +79,11 @@ const TIMELINE_EVENTS = [
   {
     id: "21-marzo",
     date: "21 de Marzo de 2026",
-    tag: "Flores y tu sonrisa",
+    tag: "Día especial",
     icon: "🌼",
-    title: "El sol sobre tu sonrisa",
-    desc: "Día donde el sol se posó sobre tu sonrisa para mirarte a la cara y que diga que tus preciosos ojos necesitasen que la naturaleza con estas flores me ayudasen a ver el maravilloso color de tu brillo, mi amor.",
-    quote: "— 'La naturaleza y las flores reflejando tu brillo...'",
+    title: "21 de Marzo",
+    desc: "Día donde el sol se posó sobre tu sonrisa para mirarte a la cara y que diga que tus preciosos ojos necesitasen que la naturaleza con estas flores me ayudasen a ver el maravilloso color de tu brillo, mi amor",
+    quote: "",
     isKeyDate: true
   },
   {
@@ -117,11 +107,11 @@ const TIMELINE_EVENTS = [
   {
     id: "21-julio",
     date: "21 de Julio de 2026",
-    tag: "Día Ghibli",
+    tag: "Día especial",
     icon: "☀️",
-    title: "Nuestro día Ghibli",
+    title: "21 de Julio",
     desc: "Día Ghibli jejej, este día fue muy bonito y especial, ya que descubrimos que nuestro amor hasta en películas más viejas que nosotros se veía reflejado. Fue asombroso.",
-    quote: "— 'Hasta en películas más viejas que nosotros se reflejaba lo nuestro...'",
+    quote: "",
     isKeyDate: true
   },
   {
@@ -137,11 +127,11 @@ const TIMELINE_EVENTS = [
   {
     id: "22-julio",
     date: "22 de Julio de 2026",
-    tag: "Consolidando lo nuestro",
+    tag: "Día especial",
     icon: "✨",
-    title: "Cuando me dijiste que SÍ",
-    desc: "Día en el que POR FIN consolidamos lo nuestro amor. Luego de tantas semanas, pensando que tenía que pedirte ser mi novia y luego de tantas veces que le decía al Señor que me permitiera decírtelo bien... Mi vida se terminó de llenar de amor y el SÍ fue el que yo tanto necesitaba.",
-    quote: "— 'Mi vida se terminó de llenar de amor y ese SÍ fue el que yo necesitaba ♡'",
+    title: "22 de Julio",
+    desc: "Día en el que POR FIN consolidamos lo nuestro amor. Luego de tantas semanas, pensando que tenía que pedirte ser mi novia y luego de tantas veces que le decía al Señor que me permitiera decírtelo bien... Mi vida se terminó de llenar de amor y el SÍ fue el que yo tanto necesitaba",
+    quote: "",
     isKeyDate: true
   },
   {
@@ -157,75 +147,132 @@ const TIMELINE_EVENTS = [
 
 let savedMediaMap = {};
 
-// 1. Cargar lo que tengamos en localStorage de forma instantánea
+// 1. Cargar lo que tengamos en localStorage de forma preliminar
 try {
   savedMediaMap = JSON.parse(localStorage.getItem('hielo_timeline_media') || '{}');
-} catch (e) {}
+} catch (e) { }
 
 async function saveMediaLocally(milestoneId, file, onProgress) {
-  // 1. Guardar primero en DataURL para que sea 100% instantáneo y funcione sin internet
-  const isVideo = file.type.startsWith('video/');
-  onProgress(25);
+  const isVideo = file.type.startsWith('video/') || /\.(mp4|mov|webm|m4v|avi|mkv)$/i.test(file.name);
+  onProgress(10);
 
-  const dataUrl = await new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = (e) => resolve(e.target.result);
-    reader.readAsDataURL(file);
-  });
-  onProgress(75);
+  let mediaData = null;
 
-  const mediaData = {
-    url: dataUrl,
-    type: isVideo ? 'video' : 'image',
-    fileName: file.name,
-    uploadedAt: new Date().toISOString()
-  };
+  // 1. PRIORIDAD ABSOLUTA: Subir a Firebase Storage en la carpeta 'videos'
+  try {
+    const fb = await import('./services/firebase.js');
+    if (fb && fb.uploadTimelineMedia) {
+      onProgress(20);
+      mediaData = await fb.uploadTimelineMedia(milestoneId, file, (pct) => {
+        onProgress(Math.min(95, Math.max(20, Math.round(20 + pct * 0.75))));
+      });
+      if (mediaData && mediaData.url) {
+        savedMediaMap[milestoneId] = mediaData;
+        console.log(`[Hielo] Recuerdo guardado con éxito en Firebase Storage (videos):`, mediaData);
+      }
+    }
+  } catch (err) {
+    console.warn("[Firebase Storage upload]:", err);
+  }
 
+  // 2. Si Firebase falló por falta de red, intentar servidor local de respaldo
+  if (!mediaData || !mediaData.url) {
+    try {
+      const resp = await fetch('/api/upload-media', {
+        method: 'POST',
+        headers: {
+          'x-milestone-id': milestoneId,
+          'x-file-name': encodeURIComponent(file.name),
+          'content-type': file.type || 'application/octet-stream'
+        },
+        body: file
+      });
+      if (resp.ok) {
+        const json = await resp.json();
+        if (json && json.media) {
+          mediaData = json.media;
+        }
+      }
+    } catch (e) {}
+  }
+
+  // 3. Fallback a DataURL para visualización instantánea local
+  if (!mediaData || !mediaData.url) {
+    const dataUrl = await new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result);
+      reader.readAsDataURL(file);
+    });
+    mediaData = {
+      url: dataUrl,
+      type: isVideo ? 'video' : 'image',
+      fileName: file.name,
+      uploadedAt: new Date().toISOString()
+    };
+  }
+
+  // Guardar en caché local
   try {
     const localStore = JSON.parse(localStorage.getItem('hielo_timeline_media') || '{}');
     localStore[milestoneId] = mediaData;
     localStorage.setItem('hielo_timeline_media', JSON.stringify(localStore));
-  } catch (e) {}
+  } catch (e) {
+    console.warn("[LocalStorage quota]:", e.message);
+  }
 
   onProgress(100);
-
-  // 2. Intentar subir en background a Firebase si está disponible (sin bloquear nada)
-  try {
-    const fb = await import('./services/firebase.js');
-    if (fb && fb.uploadTimelineMedia) {
-      fb.uploadTimelineMedia(milestoneId, file).catch(() => {});
-    }
-  } catch (e) {}
-
   return mediaData;
 }
 
-function startHielo() {
+async function syncAllSavedMedia() {
+  // 1. Sincronizar prioritariamente desde Firebase Storage (REST y Cloud)
+  try {
+    const fb = await import('./services/firebase.js');
+    if (fb && fb.fetchTimelineMedia) {
+      const cloudMedia = await fb.fetchTimelineMedia();
+      if (cloudMedia && Object.keys(cloudMedia).length > 0) {
+        savedMediaMap = Object.assign({}, savedMediaMap, cloudMedia);
+        refreshMediaElements();
+      }
+    }
+  } catch (e) {
+    console.warn("[sync Firebase error]:", e);
+  }
+
+  // 2. Servidor local si está disponible (en localhost)
+  try {
+    const res = await fetch('/api/hielo-media');
+    if (res.ok) {
+      const serverMedia = await res.json();
+      if (serverMedia && Object.keys(serverMedia).length > 0) {
+        savedMediaMap = Object.assign({}, serverMedia, savedMediaMap);
+        refreshMediaElements();
+      }
+    }
+  } catch (e) { }
+}
+
+function refreshMediaElements() {
+  Object.entries(savedMediaMap).forEach(([id, media]) => {
+    const wrap = document.getElementById(`media-wrap-${id}`);
+    const uploadArea = document.getElementById(`upload-area-${id}`);
+    if (wrap && media && media.url) {
+      wrap.innerHTML = renderMediaElement(media);
+      wrap.classList.remove('is-hidden');
+      if (uploadArea) {
+        uploadArea.style.display = 'none';
+      }
+    }
+  });
+}
+
+async function startHielo() {
   initTimeline();
   setupScrollReveal();
   setupScrollProgressBar();
   setupBubuCompanion();
+  await syncAllSavedMedia();
   initMiniMusicPlayer({ biome: 'hielo', title: 'Sector Hielo ♡' });
-
-  // Intentar sincronizar en segundo plano de forma opcional
-  import('./services/firebase.js').then(fb => {
-    if (fb && fb.fetchTimelineMedia) {
-      fb.fetchTimelineMedia().then(cloudMedia => {
-        if (cloudMedia && Object.keys(cloudMedia).length > 0) {
-          savedMediaMap = Object.assign({}, savedMediaMap, cloudMedia);
-          Object.entries(savedMediaMap).forEach(([id, media]) => {
-            const wrap = document.getElementById(`media-wrap-${id}`);
-            const uploadArea = document.getElementById(`upload-area-${id}`);
-            if (wrap && media && media.url) {
-              wrap.innerHTML = renderMediaElement(media);
-              wrap.classList.remove('is-hidden');
-              uploadArea?.remove();
-            }
-          });
-        }
-      }).catch(() => {});
-    }
-  }).catch(() => {});
 }
 
 if (document.readyState === 'loading') {
@@ -282,9 +329,15 @@ function initTimeline() {
 function renderMediaElement(media) {
   if (!media || !media.url) return '';
   if (media.type === 'video') {
-    return `<video src="${media.url}" controls playsinline preload="metadata"></video>`;
+    return `
+      <video controls playsinline preload="metadata" style="width: 100%; max-height: 340px; border-radius: 8px; object-fit: cover; background: #000; display: block;">
+        <source src="${media.url}" type="video/mp4">
+        <source src="${media.url}">
+        Tu navegador no soporta la reproducción de este video.
+      </video>
+    `;
   }
-  return `<img src="${media.url}" alt="Recuerdo de amor" loading="lazy" />`;
+  return `<img src="${media.url}" alt="Recuerdo de amor" loading="lazy" style="width: 100%; max-height: 340px; border-radius: 8px; object-fit: cover; display: block;" />`;
 }
 
 function setupUploadListeners() {

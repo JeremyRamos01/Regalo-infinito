@@ -225,25 +225,27 @@ async function saveMediaLocally(milestoneId, file, onProgress) {
 }
 
 async function syncAllSavedMedia() {
-  // 1. Cargar del servidor local (assets/hielo_uploads)
-  try {
-    const res = await fetch('/api/hielo-media');
-    if (res.ok) {
-      const serverMedia = await res.json();
-      if (serverMedia && Object.keys(serverMedia).length > 0) {
-        savedMediaMap = Object.assign({}, savedMediaMap, serverMedia);
-        refreshMediaElements();
-      }
-    }
-  } catch (e) { }
-
-  // 2. Sincronizar desde Firebase si está disponible
+  // 1. Sincronizar prioritariamente desde Firebase Storage (REST y Cloud)
   try {
     const fb = await import('./services/firebase.js');
     if (fb && fb.fetchTimelineMedia) {
       const cloudMedia = await fb.fetchTimelineMedia();
       if (cloudMedia && Object.keys(cloudMedia).length > 0) {
         savedMediaMap = Object.assign({}, savedMediaMap, cloudMedia);
+        refreshMediaElements();
+      }
+    }
+  } catch (e) {
+    console.warn("[sync Firebase error]:", e);
+  }
+
+  // 2. Servidor local si está disponible (en localhost)
+  try {
+    const res = await fetch('/api/hielo-media');
+    if (res.ok) {
+      const serverMedia = await res.json();
+      if (serverMedia && Object.keys(serverMedia).length > 0) {
+        savedMediaMap = Object.assign({}, serverMedia, savedMediaMap);
         refreshMediaElements();
       }
     }
@@ -257,17 +259,19 @@ function refreshMediaElements() {
     if (wrap && media && media.url) {
       wrap.innerHTML = renderMediaElement(media);
       wrap.classList.remove('is-hidden');
-      uploadArea?.remove();
+      if (uploadArea) {
+        uploadArea.style.display = 'none';
+      }
     }
   });
 }
 
-function startHielo() {
+async function startHielo() {
   initTimeline();
   setupScrollReveal();
   setupScrollProgressBar();
   setupBubuCompanion();
-  syncAllSavedMedia();
+  await syncAllSavedMedia();
   initMiniMusicPlayer({ biome: 'hielo', title: 'Sector Hielo ♡' });
 }
 
@@ -325,9 +329,15 @@ function initTimeline() {
 function renderMediaElement(media) {
   if (!media || !media.url) return '';
   if (media.type === 'video') {
-    return `<video src="${media.url}" controls playsinline preload="metadata"></video>`;
+    return `
+      <video controls playsinline preload="metadata" style="width: 100%; max-height: 340px; border-radius: 8px; object-fit: cover; background: #000; display: block;">
+        <source src="${media.url}" type="video/mp4">
+        <source src="${media.url}">
+        Tu navegador no soporta la reproducción de este video.
+      </video>
+    `;
   }
-  return `<img src="${media.url}" alt="Recuerdo de amor" loading="lazy" />`;
+  return `<img src="${media.url}" alt="Recuerdo de amor" loading="lazy" style="width: 100%; max-height: 340px; border-radius: 8px; object-fit: cover; display: block;" />`;
 }
 
 function setupUploadListeners() {

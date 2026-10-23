@@ -118,22 +118,77 @@ export async function fetchTimelineMedia() {
   const { storage, db } = getFirebaseApp();
   const results = {};
 
+  const KNOWN_MILESTONES = [
+    '18-enero', '28-enero', '14-febrero', '20-febrero', '24-febrero',
+    '2-marzo', '3-marzo', '4-marzo', '21-marzo', '10-abril',
+    'mayo-julio', '21-julio', 'momento-memorable', '22-julio', 'presente'
+  ];
+
   // 1. Recuperar caché local primero
   try {
     const local = JSON.parse(localStorage.getItem('hielo_timeline_media') || '{}');
     Object.assign(results, local);
   } catch (e) {}
 
-  // 2. Escanear directamente la carpeta 'videos' (y variantes) en Firebase Storage
+  // 2. Consulta REST directa a Firebase Storage (100% pública e instantánea en el navegador)
+  try {
+    const restUrl = `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o`;
+    const resp = await fetch(restUrl);
+    if (resp.ok) {
+      const data = await resp.json();
+      if (data && Array.isArray(data.items)) {
+        for (const item of data.items) {
+          const itemName = item.name || '';
+          const lowerItem = itemName.toLowerCase();
+
+          // Revisar si está en la carpeta videos o hielo_timeline
+          if (lowerItem.startsWith('videos/') || lowerItem.startsWith('hielo_timeline/')) {
+            const fileNameOnly = itemName.split('/').pop();
+            const lowerFileName = fileNameOnly.toLowerCase();
+            const isVideo = /\.(mp4|mov|webm|m4v|avi|mkv)$/i.test(lowerFileName);
+            const mediaUrl = `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/${encodeURIComponent(itemName)}?alt=media`;
+
+            const mediaObj = {
+              url: mediaUrl,
+              type: isVideo ? 'video' : 'image',
+              fileName: fileNameOnly,
+              storagePath: itemName,
+              source: 'rest-storage'
+            };
+
+            let matchedId = null;
+            for (const mId of KNOWN_MILESTONES) {
+              const cleanMId = mId.replace(/-/g, '');
+              const cleanName = lowerFileName.replace(/[-_]/g, '');
+              if (lowerFileName.includes(mId) || cleanName.includes(cleanMId)) {
+                matchedId = mId;
+                break;
+              }
+            }
+
+            if (!matchedId) {
+              const prefixMatch = fileNameOnly.split('_')[0];
+              if (KNOWN_MILESTONES.includes(prefixMatch)) {
+                matchedId = prefixMatch;
+              }
+            }
+
+            if (matchedId) {
+              results[matchedId] = mediaObj;
+              console.log(`[Hielo Media] REST detectó recuerdo para ${matchedId}:`, itemName);
+            }
+          }
+        }
+      }
+    }
+  } catch (err) {
+    console.warn("[Hielo Media REST]:", err);
+  }
+
+  // 3. Escanear con Firebase Storage SDK (por si hay archivos adicionales o tokens específicos)
   if (storage) {
     const foldersToScan = ['videos', 'Videos', 'hielo_timeline'];
     const unassignedItems = [];
-
-    const KNOWN_MILESTONES = [
-      '18-enero', '28-enero', '14-febrero', '20-febrero', '24-febrero',
-      '2-marzo', '3-marzo', '4-marzo', '21-marzo', '10-abril',
-      'mayo-julio', '21-julio', 'momento-memorable', '22-julio', 'presente'
-    ];
 
     for (const folder of foldersToScan) {
       try {
@@ -149,11 +204,10 @@ export async function fetchTimelineMedia() {
               type: isVideo ? 'video' : 'image',
               fileName: itemRef.name,
               storagePath: `${folder}/${itemRef.name}`,
-              source: 'storage'
+              source: 'storage-sdk'
             };
 
             let matchedId = null;
-            // Coincidencia exacta con ID o por partes
             for (const mId of KNOWN_MILESTONES) {
               const cleanMId = mId.replace(/-/g, '');
               const cleanName = lowerName.replace(/[-_]/g, '');
@@ -180,11 +234,11 @@ export async function fetchTimelineMedia() {
           }
         }
       } catch (e) {
-        // Carpeta vacía o no creada aún
+        // Carpeta vacía o sin permisos de listAll
       }
     }
 
-    // Si hay archivos en 'videos' que no tienen fecha en el nombre, asociarlos a hitos clave vacíos
+    // Asignar elementos no emparejados a los hitos clave pendientes
     if (unassignedItems.length > 0) {
       const KEY_MILESTONES = ['20-febrero', '3-marzo', '21-marzo', '21-julio', 'momento-memorable', '22-julio'];
       for (const keyId of KEY_MILESTONES) {
@@ -195,7 +249,7 @@ export async function fetchTimelineMedia() {
     }
   }
 
-  // 3. Sincronizar con Firestore (hielo_hitos) para obtener cualquier documento registrado
+  // 4. Sincronizar con Firestore (hielo_hitos) para obtener cualquier documento registrado
   if (db) {
     try {
       const snap = await getDocs(collection(db, "hielo_hitos"));
