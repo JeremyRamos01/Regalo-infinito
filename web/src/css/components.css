@@ -855,6 +855,26 @@
   box-shadow: 2px 2px 0px var(--nb-black);
 }
 
+/* Modo temporal durante la generación de PDF para evitar cortes y bordes partidos */
+.letter-body.is-printing-pdf {
+  border: none !important;
+  box-shadow: none !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  padding: 10px 15px !important;
+  margin: 0 auto !important;
+}
+
+.letter-body.is-printing-pdf p,
+.letter-body.is-printing-pdf h3,
+.letter-body.is-printing-pdf .letter-heading-question,
+.letter-body.is-printing-pdf .letter-signature-pencil,
+.letter-body.is-printing-pdf .letter-footer-bubu,
+.letter-body.is-printing-pdf .acrostic-paragraph {
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+}
+
 /* Estilos de impresión limpia y profesional para PDF */
 @media print {
   body {

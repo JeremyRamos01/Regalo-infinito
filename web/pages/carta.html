@@ -50,6 +50,15 @@
 
       <!-- Cuadro Principal de la Carta (Papel con líneas de lápiz y Bubu & Dudu) -->
       <div class="letter-body" id="letter-body-card">
+        <div style="text-align: center; margin-bottom: 1.4rem; padding-bottom: 0.8rem; border-bottom: 2px dashed rgba(217, 4, 41, 0.25);">
+          <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.4rem, 4vw, 1.8rem); color: #c9184a; font-weight: 800; margin: 0 0 0.35rem 0;">
+            Carta de Amor Para Raquel ♡
+          </h2>
+          <p style="font-family: 'Patrick Hand', cursive; font-size: 1.15rem; color: #7a5e63; margin: 0;">
+            25 de Octubre de 2026 — Feliz Cumpleaños, mi vida
+          </p>
+        </div>
+
         <div class="letter-content" id="letter-content">
           <!-- El texto a lápiz se irá escribiendo automáticamente aquí -->
         </div>
@@ -294,6 +303,11 @@
         el.className = sec.className;
         container.appendChild(el);
 
+        // Suave desplazamiento hacia el nuevo párrafo sin saltos bruscos
+        if (secIdx > 0) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
         // Si es acróstico, poner la primera letra en negrita destacada de inmediato
         if (sec.acrosticLetter) {
           const strong = document.createElement('strong');
@@ -318,16 +332,11 @@
             el.insertBefore(document.createTextNode(ch), caret);
             charIdx++;
 
-            // Velocidad pausada, sentida y romántica a lápiz (considerablemente más lento)
-            let delay = 48 + Math.floor(Math.random() * 26);
-            if (ch === ',' || ch === ';') delay = 260;
-            else if (ch === '.' || ch === '!' || ch === '?') delay = 540;
-            else if (ch === ' ') delay = 65;
-
-            // Desplazamiento suave para mantener el lápiz a la vista
-            if (charIdx % 12 === 0) {
-              caret.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
+            // Velocidad fluida, pausada y agradable a lápiz
+            let delay = 22 + Math.floor(Math.random() * 12);
+            if (ch === ',' || ch === ';') delay = 110;
+            else if (ch === '.' || ch === '!' || ch === '?') delay = 220;
+            else if (ch === ' ') delay = 30;
 
             const t = setTimeout(typeChar, delay);
             typingTimeouts.push(t);
@@ -336,7 +345,7 @@
             const t = setTimeout(() => {
               secIdx++;
               typeSection();
-            }, 650);
+            }, 320);
             typingTimeouts.push(t);
           }
         }
@@ -347,12 +356,15 @@
       typeSection();
     }
 
-    // Función para descargar la carta en un PDF impecable, balanceado y sin cortes de texto
+    // Descarga directa del PDF desde la carta visible (sin contenedores ocultos que generen hojas en blanco)
     function downloadLetterPDF() {
-      // Si aún está escribiendo, terminarla de inmediato para que el PDF salga completo
+      // 1. Asegurar que la carta esté completamente escrita
       if (!isFinished) {
         renderFullLetter();
       }
+
+      const footerBubu = document.getElementById('letter-footer-bubu');
+      if (footerBubu) footerBubu.style.display = 'flex';
 
       const btnTop = document.getElementById('btn-download-pdf-top');
       const btnBottom = document.getElementById('btn-download-pdf-bottom');
@@ -361,119 +373,24 @@
       if (btnTop) btnTop.innerHTML = '⏳ Generando PDF...';
       if (btnBottom) btnBottom.innerHTML = '⏳ Generando PDF...';
 
-      // 1. Crear un contenedor limpio y exclusivo para A4 (sin bordes partidos ni cajas cortadas)
-      const pdfContainer = document.createElement('div');
-      pdfContainer.id = 'pdf-export-container';
-      pdfContainer.style.width = '680px';
-      pdfContainer.style.padding = '0';
-      pdfContainer.style.background = '#ffffff';
-      pdfContainer.style.color = '#1f1a1b';
-      pdfContainer.style.fontFamily = "'Patrick Hand', 'Kalam', cursive, sans-serif";
-      pdfContainer.style.boxSizing = 'border-box';
-      pdfContainer.style.position = 'absolute';
-      pdfContainer.style.left = '-9999px';
-      pdfContainer.style.top = '0';
+      const card = document.getElementById('letter-body-card');
+      if (!card) {
+        window.print();
+        return;
+      }
 
-      // Cabecera elegante para el documento PDF
-      const pdfHeader = document.createElement('div');
-      pdfHeader.style.textAlign = 'center';
-      pdfHeader.style.marginBottom = '22px';
-      pdfHeader.style.paddingBottom = '14px';
-      pdfHeader.style.borderBottom = '2.5px solid #d90429';
-      pdfHeader.innerHTML = `
-        <h1 style="font-family: 'Space Grotesk', sans-serif; font-size: 21pt; color: #c9184a; margin: 0 0 6px 0; font-weight: 800;">
-          Carta de Amor Para Raquel ♡
-        </h1>
-        <p style="font-family: 'Patrick Hand', sans-serif; font-size: 13.5pt; color: #665558; margin: 0;">
-          25 de Octubre de 2026 — Feliz Cumpleaños, mi vida
-        </p>
-      `;
-      pdfContainer.appendChild(pdfHeader);
-
-      // 2. Insertar cada párrafo con regla estricta de NO corte de página (pageBreakInside: avoid)
-      LETTER_SECTIONS.forEach(sec => {
-        const el = document.createElement(sec.type === 'question' ? 'h3' : 'p');
-        el.style.pageBreakInside = 'avoid';
-        el.style.breakInside = 'avoid';
-
-        if (sec.type === 'question') {
-          el.style.fontFamily = "'Space Grotesk', sans-serif";
-          el.style.fontSize = '14.5pt';
-          el.style.fontWeight = '800';
-          el.style.color = '#9d0208';
-          el.style.background = 'rgba(255, 77, 109, 0.12)';
-          el.style.padding = '8px 12px';
-          el.style.borderLeft = '4px solid #d90429';
-          el.style.borderRadius = '4px';
-          el.style.marginTop = '22px';
-          el.style.marginBottom = '12px';
-          el.style.pageBreakAfter = 'avoid';
-          el.style.breakAfter = 'avoid';
-          el.textContent = sec.text;
-        } else if (sec.type === 'signature') {
-          el.style.fontSize = '15.5pt';
-          el.style.fontWeight = '700';
-          el.style.color = '#a4133c';
-          el.style.textAlign = 'right';
-          el.style.marginTop = '26px';
-          el.style.marginBottom = '18px';
-          el.textContent = sec.text;
-        } else {
-          el.style.fontSize = '13.5pt';
-          el.style.lineHeight = '1.7';
-          el.style.color = '#221e20';
-          el.style.marginTop = '0';
-          el.style.marginBottom = '14px';
-
-          if (sec.acrosticLetter) {
-            const strong = document.createElement('strong');
-            strong.style.fontFamily = "'Space Grotesk', sans-serif";
-            strong.style.fontSize = '1.5em';
-            strong.style.fontWeight = '900';
-            strong.style.color = '#d90429';
-            strong.style.marginRight = '3px';
-            strong.style.lineHeight = '1';
-            strong.textContent = sec.acrosticLetter;
-            el.appendChild(strong);
-            el.appendChild(document.createTextNode(sec.text));
-          } else {
-            el.textContent = sec.text;
-          }
-        }
-        pdfContainer.appendChild(el);
-      });
-
-      // 3. Footer Bubu y Dudu con salto de página protegido
-      const bubuFooter = document.createElement('div');
-      bubuFooter.style.pageBreakInside = 'avoid';
-      bubuFooter.style.breakInside = 'avoid';
-      bubuFooter.style.marginTop = '26px';
-      bubuFooter.style.paddingTop = '16px';
-      bubuFooter.style.borderTop = '2px dashed #e2d6d6';
-      bubuFooter.style.textAlign = 'center';
-      bubuFooter.innerHTML = `
-        <img src="../assets/bubu-dudu/bubu-dudu-love-hug.gif" alt="Bubu y Dudu" style="width: 110px; height: 110px; border-radius: 16px; border: 2.5px solid #222; margin: 0 auto 10px auto; display: block;" />
-        <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 800; font-size: 13pt; color: #d90429; margin-bottom: 4px;">
-          Para Siempre Juntos 🐻💖🐼
-        </div>
-        <div style="font-family: 'Patrick Hand', cursive; font-size: 12pt; color: #554447;">
-          De Jeremy para su hermosa Raquelita ♡ Feliz Cumpleaños, mi amor
-        </div>
-      `;
-      pdfContainer.appendChild(bubuFooter);
-
-      document.body.appendChild(pdfContainer);
+      // Aplicar estilos de exportación para PDF (fondo blanco puro, sin bordes de tarjeta ni sombras)
+      card.classList.add('is-printing-pdf');
 
       const opt = {
-        margin: [16, 14, 18, 14],
+        margin: [12, 12, 14, 12],
         filename: 'Carta_Para_Raquel_♡_Jeremy.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: {
           scale: 2,
           useCORS: true,
           logging: false,
-          scrollY: 0,
-          windowWidth: 720
+          scrollY: 0
         },
         jsPDF: {
           unit: 'mm',
@@ -481,13 +398,14 @@
           orientation: 'portrait'
         },
         pagebreak: {
-          mode: ['css', 'legacy']
+          mode: ['css', 'legacy'],
+          avoid: ['p', 'h3', '.letter-heading-question', '.letter-signature-pencil', '.letter-footer-bubu', '.acrostic-paragraph']
         }
       };
 
       if (window.html2pdf) {
-        window.html2pdf().set(opt).from(pdfContainer).save().then(() => {
-          pdfContainer.remove();
+        window.html2pdf().set(opt).from(card).save().then(() => {
+          card.classList.remove('is-printing-pdf');
           if (btnTop) btnTop.innerHTML = '✅ ¡PDF Descargado!';
           if (btnBottom) btnBottom.innerHTML = '✅ ¡PDF Descargado!';
           setTimeout(() => {
@@ -495,22 +413,26 @@
             if (btnBottom) btnBottom.innerHTML = '📥 Descargar Carta en PDF ♡';
           }, 3500);
         }).catch(err => {
-          console.warn("Fallback a impresión de navegador:", err);
-          pdfContainer.remove();
+          console.warn("Fallo html2pdf, usando fallback de impresión:", err);
+          card.classList.remove('is-printing-pdf');
           window.print();
           if (btnTop) btnTop.innerHTML = originalText;
           if (btnBottom) btnBottom.innerHTML = '📥 Descargar Carta en PDF ♡';
         });
       } else {
-        pdfContainer.remove();
+        card.classList.remove('is-printing-pdf');
         window.print();
         if (btnTop) btnTop.innerHTML = originalText;
         if (btnBottom) btnBottom.innerHTML = '📥 Descargar Carta en PDF ♡';
       }
     }
 
-    // Inicializar eventos al cargar el DOM
-    window.addEventListener('DOMContentLoaded', () => {
+    // Inicializar eventos de la carta una sola vez
+    let isCartaInitialized = false;
+    function initCarta() {
+      if (isCartaInitialized) return;
+      isCartaInitialized = true;
+
       document.getElementById('btn-skip-letter')?.addEventListener('click', () => {
         renderFullLetter();
       });
@@ -523,11 +445,13 @@
       document.getElementById('btn-download-pdf-bottom')?.addEventListener('click', downloadLetterPDF);
 
       // Iniciar escritura automática
-      setTimeout(startPencilTyping, 400);
-    });
+      setTimeout(startPencilTyping, 350);
+    }
 
-    if (document.readyState !== 'loading') {
-      setTimeout(startPencilTyping, 400);
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCarta, { once: true });
+    } else {
+      initCarta();
     }
   </script>
 
