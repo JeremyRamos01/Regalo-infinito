@@ -755,6 +755,158 @@
   100% { transform: translate(0px, -70px) scale(1.4); opacity: 0; }
 }
 
+/* Letras iniciales del acróstico P-E-R-F-E-C-T-A en negrita destacada */
+.acrostic-letter {
+  font-family: 'Space Grotesk', 'Patrick Hand', sans-serif;
+  font-size: 1.55em;
+  font-weight: 900;
+  color: #d90429;
+  display: inline-block;
+  margin-right: 3px;
+  line-height: 1;
+  vertical-align: baseline;
+  text-shadow: 1px 1px 0px rgba(0,0,0,0.15);
+}
+
+/* Encabezados y preguntas reflexivas de la carta */
+.letter-heading-question {
+  font-family: 'Space Grotesk', 'Patrick Hand', sans-serif;
+  font-size: clamp(1.25rem, 3.5vw, 1.55rem);
+  font-weight: 800;
+  color: #9d0208;
+  margin-top: 1.6rem;
+  margin-bottom: 0.9rem;
+  padding: 0.5rem 0.9rem;
+  background: rgba(255, 77, 109, 0.12);
+  border-left: 5px solid #d90429;
+  border-radius: 6px 12px 12px 6px;
+  line-height: 1.35;
+}
+
+/* Ilustración de Bubu y Dudu al final de la carta */
+.letter-footer-bubu {
+  margin-top: 2.2rem;
+  padding-top: 1.5rem;
+  border-top: 2px dashed rgba(160, 150, 140, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.6rem;
+}
+
+.bubu-footer-img {
+  width: 130px;
+  height: 130px;
+  object-fit: contain;
+  border-radius: 20px;
+  border: 3px solid var(--nb-black);
+  box-shadow: 4px 4px 0px var(--nb-black);
+  background: var(--nb-white);
+  transition: transform 0.2s ease;
+}
+
+.bubu-footer-img:hover {
+  transform: scale(1.06) rotate(-2deg);
+}
+
+.bubu-footer-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: #d90429;
+}
+
+.bubu-footer-sub {
+  font-family: 'Patrick Hand', cursive, sans-serif;
+  font-size: 1.15rem;
+  color: #554447;
+}
+
+/* Botón interactivo para descargar la carta en PDF */
+.btn-download-pdf {
+  background: var(--nb-yellow);
+  color: var(--nb-black);
+  border: 3px solid var(--nb-black);
+  box-shadow: 3px 3px 0px var(--nb-black);
+  border-radius: var(--nb-radius-pill);
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  font-weight: 800;
+  padding: 0.55rem 1.25rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  text-decoration: none;
+}
+
+.btn-download-pdf:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px var(--nb-black);
+  background: #ffe066;
+}
+
+.btn-download-pdf:active {
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0px var(--nb-black);
+}
+
+/* Estilos de impresión limpia y profesional para PDF */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #1a1a1a !important;
+  }
+  .ambient-bg,
+  .letter-stamp,
+  .gummy-badge,
+  .letter-title,
+  .letter-header-row,
+  .unlock-btn,
+  .btn-download-pdf,
+  .mini-music-player,
+  .bubu-floating-companion,
+  .pencil-caret {
+    display: none !important;
+  }
+  .stage-screen {
+    padding: 0 !important;
+    margin: 0 !important;
+    min-height: auto !important;
+  }
+  .letter-card {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+  }
+  .letter-body {
+    border: none !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+    background-image: none !important;
+    padding: 10mm 15mm !important;
+    page-break-inside: auto;
+  }
+  .letter-paragraph-pencil,
+  .letter-signature-pencil,
+  .letter-heading-question {
+    page-break-inside: avoid;
+    color: #1a1a1a !important;
+  }
+  .acrostic-letter {
+    color: #c9184a !important;
+  }
+  .letter-footer-bubu {
+    page-break-inside: avoid;
+  }
+}
+
 /* ============================================================
    BUBU & DUDU CUTE STICKERS & COMPANIONS
    ============================================================ */

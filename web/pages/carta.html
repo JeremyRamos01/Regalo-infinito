@@ -11,6 +11,8 @@
     rel="stylesheet">
   <link rel="stylesheet" href="../src/css/style.css">
   <link rel="stylesheet" href="../src/css/components.css">
+  <!-- Librería html2pdf para descarga directa del documento en PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 
 <body>
@@ -24,110 +26,255 @@
           style="width: 76px; height: 76px; border-radius: 16px;" />
       </div>
       <div class="letter-stamp">💌</div>
-      <span class="gummy-badge">Para mi Princesa Raquel ♡</span>
+      <span class="gummy-badge">Para mi Princesa Raquel ♡ 25 de Octubre</span>
 
       <h1 class="letter-title">Mi Carta Para Ti</h1>
 
       <!-- Barra de Estado y Controles del Animador de Lápiz -->
-      <div class="letter-header-row">
+      <div class="letter-header-row" style="flex-wrap: wrap; gap: 0.6rem; justify-content: space-between;">
         <div class="letter-status-pill" id="letter-status-text">
           <span class="pencil-live-dot"></span> Escribiendo con amor para ti...
         </div>
-        <div style="display: flex; gap: 0.4rem; align-items: center;">
+        <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
           <button type="button" class="letter-control-btn" id="btn-skip-letter" title="Saltar animación y ver la carta completa">
             ⏩ Ver completa
           </button>
           <button type="button" class="letter-control-btn" id="btn-replay-letter" style="display: none;" title="Ver cómo se escribe de nuevo">
             🔄 Escribir de nuevo
           </button>
+          <button type="button" class="btn-download-pdf" id="btn-download-pdf-top" title="Descargar esta carta en un bonito PDF">
+            📥 Descargar PDF ♡
+          </button>
         </div>
       </div>
 
-      <!-- Cuadro Principal de la Carta (Se ensancha y contiene todo el texto con holgura) -->
+      <!-- Cuadro Principal de la Carta (Papel con líneas de lápiz y Bubu & Dudu) -->
       <div class="letter-body" id="letter-body-card">
         <div class="letter-content" id="letter-content">
           <!-- El texto a lápiz se irá escribiendo automáticamente aquí -->
         </div>
+
+        <!-- Ilustración y dedicatoria de Bubu y Dudu al final de la carta -->
+        <div class="letter-footer-bubu" id="letter-footer-bubu" style="display: none;">
+          <img src="../assets/bubu-dudu/bubu-dudu-love-hug.gif" alt="Bubu y Dudu abrazados" class="bubu-footer-img" />
+          <div class="bubu-footer-text">
+            <span>Para Siempre Juntos 🐻💖🐼</span>
+          </div>
+          <div class="bubu-footer-sub">
+            De Jeremy para su hermosa Raquelita ♡ Feliz Cumpleaños, mi amor
+          </div>
+        </div>
       </div>
 
-      <!-- Botón Volver a los Biomas perfectamente separado debajo de todo el cuadro -->
-      <a href="../index.html#biomas" class="unlock-btn"
-        style="max-width: 280px; margin: 1.5rem auto 1rem auto; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
-        ⬅ Volver a los Biomas
-      </a>
+      <!-- Acciones Inferiores: Descarga en PDF y Volver a los Biomas -->
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 0.9rem; margin-top: 1rem; margin-bottom: 2rem;">
+        <button type="button" class="btn-download-pdf" id="btn-download-pdf-bottom" style="font-size: 1.05rem; padding: 0.75rem 1.8rem;">
+          📥 Descargar Carta en PDF ♡
+        </button>
+
+        <a href="../index.html#biomas" class="unlock-btn"
+          style="max-width: 280px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+          ⬅ Volver a los Biomas
+        </a>
+      </div>
     </div>
   </main>
 
   <script>
-    // Motor robusto de escritura a lápiz natural
+    // Secciones exactas de la carta de Jeremy para Raquel con el Acróstico P-E-R-F-E-C-T-A
     const LETTER_SECTIONS = [
       {
-        className: 'letter-greeting-pencil',
-        text: 'Mi amor hermosa,'
-      },
-      {
+        type: 'paragraph',
         className: 'letter-paragraph-pencil',
-        text: 'Cada rincón de este mundo virtual y real tiene sentido porque estás tú. Como en Lyoko, donde cada sector guarda un misterio, el misterio más grande y hermoso de mi vida ha sido encontrarte y enamorarme de cada una de tus risas, tus detalles y tu forma única de brillar.'
+        text: 'Y a seguir hacia adelante. Eso le decía yo al Señor una noche melancólica de noviembre del año pasado, recordando las malas cosas que albergaron en mi vida y que sin posibilidad alguna de retorno había aceptado. Viendo mi fin al acabar con todo sentimiento de amor, de bondad, de todo lo bueno que el ser humano puede apreciar, que el ser humano puede comprender y entender. En el momento en que menos me lo esperaba... en el momento donde menos yo tenia en mente el enamorarme, en volver a confiar, en volver a sentir, donde dentro de mi burbuja llegó esa "paz" que creía tener... Fue gracioso en verdad, que las cosas pasaran de "Casualidad" un día que ni me lo esperaba flechaste mi corazón sin piedad ninguna provocándome el deseo de amar, el deseo de unirme a ti amor. Ese momento por el cual yo entré por mi puerta sin esperar nada, solo lo mismo de siempre, solo el desorden de mi vida haciéndome sentir "comodo" llegaste tú amor. Sé que me dijiste que te sonreí mucho y que eso te encantó de mi, sabes que me encantó de ti, me encantó la naturalidad, la monotonía, la bondad, la elegancia, la majestuosidad, de lo que veían mis ojos delante amor, de esa preciosura mi amor. Recuerdo cada gesto que salió de ti, sonriéndome al compas de mis movimientos, dispuesta a darme la mano y que nuestros cuerpos por primera vez entraran en contacto. Sabes que pensé... dije dentro de mí: Ojala poder recibir este tipo de saludo siempre. Y desde ahí empezó nuestra aventura, comenzó lo que para mi era un sueño imposible Dios mismo me lo puso en bandeja de plata para que apreciara lo más perfecto y hermoso que ha hecho y hará jamás: Tú mi amor.'
       },
       {
+        type: 'paragraph',
         className: 'letter-paragraph-pencil',
-        text: 'Ni la piedra más preciosa del universo compite con la magia que tienes. Gracias por ser mi lugar seguro, mi compañera de aventuras y el amor de mi vida.'
+        text: 'Como decía en el pasar de los días, semanas, meses... no comprendía el porque nos llevábamos tan bien, era como si la realidad que yo viví era falsa, todo lo anterior a ti fue falso, porque lo que yo necesitaba, la realidad que yo deseaba vivir, la vida que yo anhelaba tener, era junto a ti amor. Desde el primer momento en que te vi supe que eras muy especial amor, vi en tus ojos como tu alma llena de dolor y tristeza encontraba consuelo en Dios y en la comodidad de sus cosas. Durante varios meses comenzamos a hablar muy tendido, y a profundizarnos.. a Sentirnos cada vez más cercanos el uno del otro. Y una de las cosas que me hizo darme cuenta de que lo nuestro es de Dios y que tú y solo tú eres la mujer ideal para mí. En una de las charlas que teníamos de noche, esas charlas profundas, donde no me imaginaba jamás conectar en 2-3 meses con alguien de tal manera que intercambiemos corazones para comparar el dolor del otro, y dije e hice una promesa: Si todo esto sale bien, y después de esta charla yo me siento nuevo, me siento relajado, me siento liberado, Raquel va a ser mi mujer. Literalmente será la única que me haya eso sacar todo de mi a ese nivel. Y adivina que..... Hoy 25 de octubre Día de tu maravilloso nacimiento amor, día en el que los cielos se abrieron, para que bajara ese angelito de ojitos hermoso y sonrisa perfecta a este mundo lleno de maldad para iluminarlo mi amor. Esa promesa yo la mantendré desde ahora y para siempre amor, porque sabes que?... Gracias a tu ser como eres conmigo, como eras conmigo en esas charlas, donde descubrí que tenias más dentro de lo que pensé, que también sufrías como yo, que reprimías tú verdadero yo. Por el simple hecho de no tener a nadie a quien enseñarlo, nadie que te demostrara que podías ser tú misma, nadie que dijeras: vale la pena que me vea como realmente soy.'
       },
       {
+        type: 'question',
+        className: 'letter-heading-question',
+        text: '¿Me amará tal como soy?'
+      },
+      {
+        type: 'paragraph',
+        className: 'letter-paragraph-pencil',
+        text: 'Y la respuesta a esta pregunta era, es, y será un SI ROTUNDO. Como no amarte amor si en un profundo lago, en una zanja impensable, en un agujero sin fin donde yo me encontraba, donde era consciente del daño que me hacía y por no tener a nadie en mi vida que sea como tú, que me escuche como tú, que me entienda como tú, que me haga sentir amado como tú, que me quiera tanto como tú, que haga de mi vida la mejor vida posible como tú, que piense en mí como tú. Amor... Jamás te preguntes que veo en ti, que siento por ti, porque tú, porque razón estoy contigo, muy simple amor. Tú me das, tu eres, tu vales, tu te mereces.. TODO amor, todo, todito todo mi vida. En esos momentos que pensamos que ni entendemos porque hacemos las cosas y pensarlas mucho menos, una cosa tienes que tener clara amor. Tú eres la mujer con la que yo elegí vivir y eso será desde hoy, mañana y siempre. Te amo preciosa.'
+      },
+      {
+        type: 'question',
+        className: 'letter-heading-question',
+        text: '¿Soy Perfecta?'
+      },
+      {
+        type: 'paragraph',
+        className: 'letter-paragraph-pencil',
+        text: 'Bueno amor, esa pregunta también tiene fácil respuesta y es SI amor eres perfecta y permíteme darte una lista de adjetivos los cuáles definen el porque mi mujer es perfecta: Mi mujer es linda, Mi mujer es Ordenada, Mi mujer es atenta, Mi mujer es amable, Mi mujer es cariñosa, Mi mujer es valiente, Mi mujer es fuerte, Mi mujer tiene coraje, Mi mujer es tranquila, Mi mujer es única, Mi mujer me cuida, Mi mujer me calma, Mi mujer me alienta a seguir adelante, Mi mujer mima mi corazón, Mi mujer me ama, Mi mujer ve mis fortalezas, Mi mujer ve mi verdadero yo... y lo abraza, y lo reconforta cuando cree que está mal... cuando cree que es un desecho, cuando cree que no debió existir, cuando todos lo ven como si fuera un monstruo, como si fuese su culpa, por ser él, Mi mujer me ve con esos ojitos preciosos, me toca la barba con esa gentileza que solo ella tiene, que dice que no haga caso, hace que me relaje, me da un beso, me hace sentir que a su lado es donde tengo que estar, Mi mujer es mi tiempo agradable y bonito, Mi mujer es mi alegría, Mi mujer es absolutamente lo que necesitaba, Mi mujer es Sexy, Mi mujer es espectacular en todos los aspectos: Es lista, es estratega, es atenta, es seria, es madura, es brillante, es todo lo que necesito. Mi mujer es.... IDONEA para mí.'
+      },
+      {
+        type: 'question',
+        className: 'letter-heading-question',
+        text: 'Vamos a ver porqué razón perfecta es exactamente lo mismo decir Raquel:'
+      },
+      {
+        type: 'acrostic',
+        acrosticLetter: 'P',
+        className: 'letter-paragraph-pencil acrostic-paragraph',
+        text: 'rimeramente cuando hablamos de lo que has hecho en mi, te pondré en un recuerdo... Hubo una vez que yo pensé en acabar con mi vida, teniendo 12 o así y fue porque bueno... tampoco era tan recibido socialmente, como te comenté estuve muchos años de mi vida sufriendo bullying en clase, con amigos y todo, no se un infierno para un niño de 12 años y claro el pensamiento que me llevó a eso fue: Estoy solo, nadie me va a querer lo suficiente como para que me haga ver que no soy yo el problema, que no es por mí que me ven mal, que me apartan, en algún momento me elegirán?, podré ser feliz. Y hoy digo con toda la sonrisa que seguramente tenga puesta en la cara tu leyendo esto. Que Tengo lo que ese niño deseó. Tengo a ti amor.'
+      },
+      {
+        type: 'acrostic',
+        acrosticLetter: 'E',
+        className: 'letter-paragraph-pencil acrostic-paragraph',
+        text: 'n ocasiones cuando creces te das cuenta de las cosas que te hacen bien y que tienen un impacto positivo en la vida y en este caso eres tú, amor no sabes lo feliz que yo soy cuando veo una sonrisa hacia mí, y no es una sonrisa de pena si no una de amor, una de cariño, una de felicidad y digo dentro de mí: ¿Me merezco esto?... Amor me lo merezco? Por eso sé que tú si eres la que yo necesitaba.'
+      },
+      {
+        type: 'acrostic',
+        acrosticLetter: 'R',
+        className: 'letter-paragraph-pencil acrostic-paragraph',
+        text: 'aquel, mi amor, mi cielo, mi solecito hermoso. Yo necesito hacerte feliz amor y siempre aspiro entregar todo de mí, porque tú lo vales amor, tú eres la razón de lo que yo conozco y conocía como felicidad y quiero decirle a mis hijos que en todo momento, en toda ocasión yo estuve enamorado, yo estoy enamorado y estaré enamorado de vuestra preciosa y hermosa madre.'
+      },
+      {
+        type: 'acrostic',
+        acrosticLetter: 'F',
+        className: 'letter-paragraph-pencil acrostic-paragraph',
+        text: 'inalmente las dos almas solitarias se encontraron, se vieron, Yo siendo pobre de alma y corazón pude encontrar a Raquel llena de lo que yo necesitaba. Dios vio nuestra conexión, y vio que somos felices, y que lo seremos aún más.'
+      },
+      {
+        type: 'acrostic',
+        acrosticLetter: 'E',
+        className: 'letter-paragraph-pencil acrostic-paragraph',
+        text: 'sperando una bendición como tú amor y sin yo servirle al señor pensando en que yo también era merecedor de la felicidad, entendiendo que yo también puedo optar por un sueño aunque no llegara nunca y BUM llegaste amor.'
+      },
+      {
+        type: 'acrostic',
+        acrosticLetter: 'C',
+        className: 'letter-paragraph-pencil acrostic-paragraph',
+        text: 'uando me besas amor, cuando nos besamos amor, yo siento como si mi corazón y el tuyo se abrazan, como si nuestras almas entraran en un ciclo de amor y no quieren salir, cuando me miras a los ojos y veo tu alma llamándome armónicamente para bailar con la mía, es uno de los momentos más hermosos que vivo contigo día con día y espero poder hacerlo siempre amor. Gracias por todo mi reina.'
+      },
+      {
+        type: 'acrostic',
+        acrosticLetter: 'T',
+        className: 'letter-paragraph-pencil acrostic-paragraph',
+        text: 'iempo me falta para darte a entender cuanto te amo mi amor, cuanto te mereces que te amen así, con ese deseo, ese fervor, esa pasión, ese cariño, esos momentos álgidos de felicidad, amor yo de verdad que te amo y daría una y mil veces mi vida por ti cariño.'
+      },
+      {
+        type: 'acrostic',
+        acrosticLetter: 'A',
+        className: 'letter-paragraph-pencil acrostic-paragraph',
+        text: 'si pudiste ver como cada palabra de la palabra PERFECTA tiene que ver contigo, viendo que mi mujer, la que está leyendo esto, la que está a mi lado, esa mujer a la que considero como mi mejor amiga, como mi novia, como mi futura esposa, como la compañera de vida que tendré a esa mujer la amo, a esa mujer la amaré siempre y por esa mujer estoy dispuesto a todo.'
+      },
+      {
+        type: 'paragraph',
+        className: 'letter-paragraph-pencil',
+        text: 'Vales la pena cada segundo que vivo y respiro y estoy junto a ti amor.'
+      },
+      {
+        type: 'paragraph',
+        className: 'letter-paragraph-pencil',
+        text: 'Sabes... Solia tener miedo a amar descontroladamente, a volverme loco de amor con alguien porque pensaba que nadie le pondría el mimo y el cariño que requiere, hasta que contigo entendí y decidí que tú no te mereces otra manera de que te amen que no sea esa amor. Te amo Princesa. Cuando te veo siendo tú, cuando siento que puedo ser niño, cuando veo tu lado niña también jugando con el mío digo dentro de mí: Aquí es donde quiero y elijo estar junto a ti amor.'
+      },
+      {
+        type: 'paragraph',
+        className: 'letter-paragraph-pencil',
+        text: 'Y bueno ya voy cortando que como que se está haciendo muy largo esto jeejee, me quiero despedir diciendo esto, cuando pensaba que todo estaba roto llegaste a enseñarme que estaba equivocado amor y oro al señor que seas tú por el resto de mis días y que como dice la canción que estas escuchando o que estabas escuchando, sé fuerte amor, incluso si no estoy porque yo confío en ti amor y para mi tú siempre estarás en mi mente, y siempre te recordaré como la única mujer que me dio la oportunidad de ser feliz.'
+      },
+      {
+        type: 'paragraph',
+        className: 'letter-paragraph-pencil',
+        text: 'Raquel Pineda Riopedre pongo mis lagrimas en esta carta, pongo todo de mí en estas letras, porque has hecho de mí, una persona que valora su vida cuando antes no lo hacía, que ahora es más consciente de lo que tiene y que ahora cuida de la mejor mujer que Dios hizo y hará jamás.'
+      },
+      {
+        type: 'paragraph',
+        className: 'letter-paragraph-pencil',
+        text: 'Raquel Pineda Riopedre Gracias por darle significado a mi vida. Te ama tu hombre, y siempre cuidaré de ti amor por siempre y para siempre y te amaré con todo el amor que te puedo dar y un poquito más amor.'
+      },
+      {
+        type: 'paragraph',
+        className: 'letter-paragraph-pencil',
+        text: 'Te amo mi vida, disfruta de tu cumpleaños amor. Con todo el amor que existe y más..'
+      },
+      {
+        type: 'signature',
         className: 'letter-signature-pencil',
-        text: 'Siempre tuyo, con todo mi corazón ♡'
+        text: 'Att: Jeremy Alexander Ramos Segura (Esposo de Raquel y Principe suyo).'
       }
     ];
 
     let typingTimeouts = [];
     let isSkipped = false;
+    let isFinished = false;
 
     function clearTyping() {
       typingTimeouts.forEach(t => clearTimeout(t));
       typingTimeouts = [];
     }
 
+    // Renderizar la carta completa de forma inmediata
     function renderFullLetter() {
       const container = document.getElementById('letter-content');
       if (!container) return;
+      isSkipped = true;
+      clearTyping();
       container.innerHTML = '';
+
       LETTER_SECTIONS.forEach(sec => {
-        const p = document.createElement('p');
-        p.className = sec.className;
-        p.textContent = sec.text;
-        container.appendChild(p);
+        const el = document.createElement(sec.type === 'question' ? 'h3' : 'p');
+        el.className = sec.className;
+
+        if (sec.acrosticLetter) {
+          const strong = document.createElement('strong');
+          strong.className = 'acrostic-letter';
+          strong.textContent = sec.acrosticLetter;
+          el.appendChild(strong);
+          el.appendChild(document.createTextNode(sec.text));
+        } else {
+          el.textContent = sec.text;
+        }
+
+        container.appendChild(el);
       });
+
       finishLetter();
     }
 
     function finishLetter() {
       clearTyping();
+      isFinished = true;
       const caret = document.querySelector('.pencil-caret');
       if (caret) caret.remove();
 
       const statusEl = document.getElementById('letter-status-text');
       const skipBtn = document.getElementById('btn-skip-letter');
       const replayBtn = document.getElementById('btn-replay-letter');
+      const footerBubu = document.getElementById('letter-footer-bubu');
 
       if (statusEl) statusEl.innerHTML = '✨ Carta escrita con todo mi amor ♡';
       if (skipBtn) skipBtn.style.display = 'none';
       if (replayBtn) replayBtn.style.display = 'inline-flex';
+      if (footerBubu) footerBubu.style.display = 'flex';
     }
 
+    // Animación suave de escritura a lápiz natural
     function startPencilTyping() {
       const container = document.getElementById('letter-content');
       const statusEl = document.getElementById('letter-status-text');
       const skipBtn = document.getElementById('btn-skip-letter');
       const replayBtn = document.getElementById('btn-replay-letter');
+      const footerBubu = document.getElementById('letter-footer-bubu');
 
       if (!container) return;
       clearTyping();
       isSkipped = false;
+      isFinished = false;
 
       container.innerHTML = '';
       if (statusEl) statusEl.innerHTML = '<span class="pencil-live-dot"></span> Escribiendo con amor para ti...';
       if (skipBtn) skipBtn.style.display = 'inline-flex';
       if (replayBtn) replayBtn.style.display = 'none';
+      if (footerBubu) footerBubu.style.display = 'none';
 
       // Cursor de lápiz animado
       const caret = document.createElement('span');
@@ -143,10 +290,19 @@
         }
 
         const sec = LETTER_SECTIONS[secIdx];
-        const p = document.createElement('p');
-        p.className = sec.className;
-        container.appendChild(p);
-        p.appendChild(caret);
+        const el = document.createElement(sec.type === 'question' ? 'h3' : 'p');
+        el.className = sec.className;
+        container.appendChild(el);
+
+        // Si es acróstico, poner la primera letra en negrita destacada de inmediato
+        if (sec.acrosticLetter) {
+          const strong = document.createElement('strong');
+          strong.className = 'acrostic-letter';
+          strong.textContent = sec.acrosticLetter;
+          el.appendChild(strong);
+        }
+
+        el.appendChild(caret);
 
         let charIdx = 0;
         const text = sec.text;
@@ -159,22 +315,23 @@
 
           if (charIdx < text.length) {
             const ch = text[charIdx];
-            p.insertBefore(document.createTextNode(ch), caret);
+            el.insertBefore(document.createTextNode(ch), caret);
             charIdx++;
 
-            let delay = 30 + Math.floor(Math.random() * 18);
-            if (ch === ',' || ch === ';') delay = 160;
-            else if (ch === '.' || ch === '!') delay = 300;
-            else if (ch === ' ') delay = 40;
+            // Velocidad fluida y natural de estilográfica/lápiz (10-18ms)
+            let delay = 12 + Math.floor(Math.random() * 8);
+            if (ch === ',' || ch === ';') delay = 70;
+            else if (ch === '.' || ch === '!') delay = 130;
+            else if (ch === ' ') delay = 16;
 
             const t = setTimeout(typeChar, delay);
             typingTimeouts.push(t);
           } else {
-            // Pausa entre párrafos
+            // Pausa breve entre párrafos
             const t = setTimeout(() => {
               secIdx++;
               typeSection();
-            }, 380);
+            }, 180);
             typingTimeouts.push(t);
           }
         }
@@ -185,10 +342,69 @@
       typeSection();
     }
 
-    // Inicializar botones y auto-escritura
+    // Función para descargar la carta en PDF bonito
+    function downloadLetterPDF() {
+      const element = document.getElementById('letter-body-card');
+      if (!element) return;
+
+      // Si aún está escribiendo, terminarla de inmediato para que el PDF salga completo
+      if (!isFinished) {
+        renderFullLetter();
+      }
+
+      const btnTop = document.getElementById('btn-download-pdf-top');
+      const btnBottom = document.getElementById('btn-download-pdf-bottom');
+      const originalText = btnTop ? btnTop.innerHTML : '📥 Descargar PDF ♡';
+
+      if (btnTop) btnTop.innerHTML = '⏳ Generando PDF...';
+      if (btnBottom) btnBottom.innerHTML = '⏳ Generando PDF...';
+
+      // Asegurar que Bubu y Dudu sean visibles en el PDF
+      const footerBubu = document.getElementById('letter-footer-bubu');
+      if (footerBubu) footerBubu.style.display = 'flex';
+
+      const opt = {
+        margin: [12, 12, 14, 12],
+        filename: 'Carta_Para_Raquel_♡_Jeremy.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          logging: false,
+          letterRendering: true
+        },
+        jsPDF: {
+          unit: 'mm',
+          format: 'a4',
+          orientation: 'portrait'
+        },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+      };
+
+      if (window.html2pdf) {
+        window.html2pdf().set(opt).from(element).save().then(() => {
+          if (btnTop) btnTop.innerHTML = '✅ ¡PDF Descargado!';
+          if (btnBottom) btnBottom.innerHTML = '✅ ¡PDF Descargado!';
+          setTimeout(() => {
+            if (btnTop) btnTop.innerHTML = originalText;
+            if (btnBottom) btnBottom.innerHTML = '📥 Descargar Carta en PDF ♡';
+          }, 3500);
+        }).catch(err => {
+          console.warn("Fallback a impresión de navegador:", err);
+          window.print();
+          if (btnTop) btnTop.innerHTML = originalText;
+          if (btnBottom) btnBottom.innerHTML = '📥 Descargar Carta en PDF ♡';
+        });
+      } else {
+        window.print();
+        if (btnTop) btnTop.innerHTML = originalText;
+        if (btnBottom) btnBottom.innerHTML = '📥 Descargar Carta en PDF ♡';
+      }
+    }
+
+    // Inicializar eventos al cargar el DOM
     window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('btn-skip-letter')?.addEventListener('click', () => {
-        isSkipped = true;
         renderFullLetter();
       });
 
@@ -196,13 +412,15 @@
         startPencilTyping();
       });
 
-      // Iniciar de inmediato automáticamente
-      setTimeout(startPencilTyping, 350);
+      document.getElementById('btn-download-pdf-top')?.addEventListener('click', downloadLetterPDF);
+      document.getElementById('btn-download-pdf-bottom')?.addEventListener('click', downloadLetterPDF);
+
+      // Iniciar escritura automática
+      setTimeout(startPencilTyping, 400);
     });
 
-    // Fallback si DOMContentLoaded ya pasó
     if (document.readyState !== 'loading') {
-      setTimeout(startPencilTyping, 350);
+      setTimeout(startPencilTyping, 400);
     }
   </script>
 
